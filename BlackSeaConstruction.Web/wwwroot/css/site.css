@@ -1,0 +1,583 @@
+﻿@font-face {
+    font-family: 'Conv_MagistralC-Bold';
+    src: url('fonts/MagistralC-Bold.eot');
+    src: local('O'), url('fonts/MagistralC-Bold.woff') format('woff'), url('fonts/MagistralC-Bold.ttf') format('truetype'), url('fonts/MagistralC-Bold.svg') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Conv_MagistralC';
+    src: url('fonts/MagistralC.eot');
+    src: local('O'), url('fonts/MagistralC.otf') format('woff'), url('fonts/MagistralC.woff') format('woff'), url('fonts/MagistralC.ttf') format('truetype'), url('fonts/MagistralC.svg') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+header,
+nav,
+section,
+article,
+aside,
+footer {
+    display: block;
+}
+
+    nav.navbar {
+        margin-top: 30px;
+        min-height: 80px;
+        background: #ff9600c4 !important;
+        -webkit-border-radius: 15px !important;
+        -moz-border-radius: 15px !important;
+        border-radius: 15px !important;
+    }
+
+body,
+div,
+form,
+h1,
+h2,
+h3,
+p,
+ul,
+ol {
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    max-height: 100%
+}
+
+body {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    background: #0e0600 url(../images/site/bg.jpg) no-repeat top center;
+    background-size: contain;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+header {
+    position: relative;
+    display: block;
+    width: 100%;
+}
+
+    header nav {
+        position: relative;
+        margin: auto;
+        max-width: 980px;
+        display: table;
+    }
+
+    header .topmenu {
+        position: absolute;
+        left: 220px;
+        top: 55px;
+        display: table;
+        font-family: 'Conv_MagistralC-Bold';
+        font-size: 18px;
+        z-index: 99;
+    }
+
+        header .topmenu li {
+            list-style: none;
+            float: left;
+            margin-left: 15px;
+            padding-left: 10px;
+            padding-right: 10px;
+            line-height: 40px;
+            -webkit-border-radius: 10px;
+            -moz-border-radius: 10px;
+            border-radius: 10px;
+        }
+
+        header .topmenu a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        header .topmenu .ov {
+            background: #1f9aac;
+        }
+
+    header nav .logo {
+        position: absolute;
+        left: 13px;
+        top: -13px;
+    }
+
+        header nav .logo img {
+            width: 90%;
+        }
+
+    header nav .helmet {
+        position: absolute;
+        right: -107px;
+        top: -25px;
+    }
+
+        header nav .helmet img {
+            width: 60%;
+        }
+
+    header nav .topmenu-short {
+        display: none;
+        width: 100%;
+        top: 140px;
+        left: 0px;
+        filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0);
+        /* IE 5.5+*/
+        -moz-opacity: 0;
+        /* Mozilla 1.6 è íèæå */
+        -khtml-opacity: 0;
+        /* Konqueror 3.1, Safari 1.1 */
+        opacity: 0;
+        /* CSS3 - Mozilla 1.7b +, Firefox 0.9 +, Safari 1.2+, Opera 9+ */
+    }
+
+        header nav .topmenu-short ul {
+            width: 92%;
+            margin-left: 25px;
+        }
+
+        header nav .topmenu-short li {
+            clear: both;
+            width: 100%;
+            margin: 5px 0px 0px 0px;
+            background: #fdaf33;
+            text-align: center;
+        }
+
+    header nav #topmenu-short-tit {
+        position: absolute;
+        display: none;
+        width: 50%;
+        left: 230px;
+        top: 55px;
+        padding: 10px;
+        display: table;
+        font-family: 'Conv_MagistralC-Bold';
+        font-size: 18px;
+        z-index: 99;
+        background-color: #fdaf33;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        border-radius: 10px;
+        color: #fff;
+        text-decoration: none;
+        text-align: center;
+    }
+
+section {
+    position: relative;
+    display: table;
+    width: 100%;
+}
+
+#cont-bg {
+    position: relative;
+    display: block;
+    max-width: 980px;
+    margin: auto;
+    min-height: 400px;
+}
+
+    #cont-bg .content {
+        background-color: rgba(52,58,64,.8);
+        border-radius: 25px;
+    }
+
+#short-news {
+    position: relative;
+    display: table;
+    width: 30%;
+    height: 350px;
+    float: left;
+    margin: 25px 0px 25px 25px;
+    padding: 15px;
+    background: url(http://bsco.ca/images/site/short-news-bg.png);
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+}
+
+    #short-news .prevv {
+        position: absolute;
+        width: 34px;
+        height: 103px;
+        top: 120px;
+        left: 0px;
+        background: url(../images/site/slider-but-bg.png) no-repeat left;
+        z-index: 99;
+    }
+
+    #short-news .nextt {
+        position: absolute;
+        width: 34px;
+        height: 103px;
+        top: 120px;
+        right: 0px;
+        background: url(../images/site/slider-but-bg.png) no-repeat right;
+        z-index: 99;
+    }
+
+.short-news-clip {
+    position: absolute;
+    display: block;
+    width: 90%;
+    height: 280px;
+    left: 5%;
+    top: 70px;
+    clip: rect(0px, auto, 280px, 0px);
+}
+
+#short-news-clip-cont {
+    position: absolute;
+    width: 930px;
+    overflow: hidden;
+    left: 0px;
+}
+
+    #short-news-clip-cont img {
+        border: 5px solid #b27b2a;
+        width: 268px;
+        height: auto;
+    }
+
+    #short-news-clip-cont div {
+        width: 280px;
+        height: 300px;
+        text-align: center;
+        float: left;
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+
+.readmore {
+    font-family: 'Conv_MagistralC-Bold';
+    font-size: 15px;
+    font-style: italic;
+    color: #281708;
+}
+
+#cont {
+    width: 60%;
+    float: left;
+    margin: 25px 0px 25px 25px;
+}
+
+p {
+    margin-top: 5px;
+    font-family: 'Conv_MagistralC-Bold';
+    font-size: 16px;
+    color: white;
+    text-align: justify;
+}
+
+h1 {
+    font-family: 'Conv_MagistralC-Bold';
+    font-size: 32px;
+    font-weight: 200;
+    color: #fdaf33;
+}
+
+h2 {
+    font-family: 'Conv_MagistralC-Bold';
+    font-size: 24px;
+    font-weight: 200;
+    color: #fff;
+}
+
+.our-services {
+    font-family: 'Conv_MagistralC-Bold';
+    font-size: 22px;
+    color: #fdaf33;
+    font-style: italic;
+    margin-top: 15px;
+    text-align: left;
+}
+
+    .our-services li {
+        list-style: none;
+        width: 50%;
+        float: left;
+    }
+
+        .our-services li ul li {
+            font-family: 'Conv_MagistralC';
+            width: 100%;
+            font-size: 15px;
+            text-align: left;
+            line-height: 30px;
+            padding-left: 20px;
+            clear: both;
+            background: url(../images/site/bullet.png) no-repeat 0px 8px;
+        }
+
+        .our-services li ul a {
+            color: #fff;
+        }
+
+.our-services-short li {
+    width: 100%;
+    clear: both;
+}
+
+.our-services-short li ul {
+    margin-bottom: 15px;
+}
+
+footer div {
+    font-family: 'Conv_MagistralC-Bold';
+    font-size: 13px;
+    color: #fdaf33;
+    background-color: rgba(52,58,64,.5);
+}
+
+    footer div a {
+        color: #fff;
+    }
+
+    footer div img {
+        float: right;
+    }
+
+#bg-obj {
+    position: absolute;
+    width: 100%;
+    bottom: 0px;
+}
+
+#bg-obj-cont {
+    position: relative;
+    margin: auto;
+    width: 90%;
+    max-width: 980px;
+    min-width: 583px;
+    display: table;
+}
+
+#projects {
+    position: absolute;
+    width: 532px;
+    height: 391px;
+    bottom: -220px;
+    right: -100px;
+    background: url(../images/site/projects.png) no-repeat;
+}
+
+#chisel {
+    position: absolute;
+    width: 214px;
+    height: 303px;
+    bottom: -110px;
+    left: -100px;
+    background: url(../images/site/chisel.png) no-repeat;
+}
+
+#hands {
+    position: absolute;
+    width: 404px;
+    height: 536px;
+    bottom: -400px;
+    left: 20%;
+    background: url(../images/site/hands.png) no-repeat;
+}
+
+#roulette {
+    position: absolute;
+    width: 249px;
+    height: 177px;
+    bottom: -160px;
+    right: 50px;
+    background: url(../images/site/roulette.png) no-repeat;
+}
+
+#hammer {
+    position: absolute;
+    right: -185px;
+    top: -10px;
+    width: 213px;
+    height: 312px;
+    background: url(../images/site/hammer.png) no-repeat;
+}
+
+#intro {
+    position: fixed;
+    top: 100px;
+    width: 100%;
+    height: 100%;
+    z-index: 9999999999;
+}
+
+#intro-bg {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left: 0px;
+    top: 0px;
+    z-index: 9999999998;
+    background: #0e0600 url(../images/site/bg.jpg) no-repeat center;
+}
+
+.carousel-caption {
+    padding: 8px 0px 0px 0px;
+    background: rgba(52,58,64,.8);
+    border-radius: 5px;
+    bottom: auto;
+    top: 20px;
+}
+
+.carousel-control-prev, .carousel-control-next {
+    z-index: 999;
+}
+
+.list-group-item.active {
+    border-color: #ffc107 !important;
+}
+
+#intro-helmet {
+    position: absolute;
+    width: 200px;
+    height: 184px;
+    left: 400px;
+    top: 150px;
+    background: url(../images/site/helmet.png) no-repeat center;
+    background-size: contain;
+    filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0);
+    /* IE 5.5+*/
+    -moz-opacity: 0;
+    /* Mozilla 1.6 è íèæå */
+    -khtml-opacity: 0;
+    /* Konqueror 3.1, Safari 1.1 */
+    opacity: 0;
+    /* CSS3 - Mozilla 1.7b +, Firefox 0.9 +, Safari 1.2+, Opera 9+ */
+}
+
+#intro-logo-3d {
+    position: absolute;
+    width: 50px;
+    height: 38px;
+    right: 0px;
+    top: 0px;
+    background: url(../images/site/intro/logo-3d.png) no-repeat center;
+    background-size: contain;
+    filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0);
+    /* IE 5.5+*/
+    -moz-opacity: 0;
+    /* Mozilla 1.6 è íèæå */
+    -khtml-opacity: 0;
+    /* Konqueror 3.1, Safari 1.1 */
+    opacity: 0;
+    /* CSS3 - Mozilla 1.7b +, Firefox 0.9 +, Safari 1.2+, Opera 9+ */
+}
+
+#intro-pages-0 {
+    position: absolute;
+    width: 532px;
+    height: 391px;
+    top: 0px;
+    left: 0px;
+    background: url(../images/site/intro/pages-0.png) no-repeat;
+    filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0);
+    /* IE 5.5+*/
+    -moz-opacity: 0;
+    /* Mozilla 1.6 è íèæå */
+    -khtml-opacity: 0;
+    /* Konqueror 3.1, Safari 1.1 */
+    opacity: 0;
+    /* CSS3 - Mozilla 1.7b +, Firefox 0.9 +, Safari 1.2+, Opera 9+ */
+}
+
+#intro-pages-1 {
+    position: absolute;
+    width: 532px;
+    height: 391px;
+    top: 0px;
+    left: 0px;
+    background: url(../images/site/intro/pages-1.png) no-repeat;
+    filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0);
+    /* IE 5.5+*/
+    -moz-opacity: 0;
+    /* Mozilla 1.6 è íèæå */
+    -khtml-opacity: 0;
+    /* Konqueror 3.1, Safari 1.1 */
+    opacity: 0;
+    /* CSS3 - Mozilla 1.7b +, Firefox 0.9 +, Safari 1.2+, Opera 9+ */
+}
+
+#intro-house {
+    position: absolute;
+    width: 309px;
+    height: 284px;
+    top: 150px;
+    left: 100px;
+}
+
+    #intro-house div {
+        position: absolute;
+        width: 309px;
+        height: 284px;
+        top: 0px;
+        left: 0px;
+        filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0);
+        /* IE 5.5+*/
+        -moz-opacity: 0;
+        /* Mozilla 1.6 è íèæå */
+        -khtml-opacity: 0;
+        /* Konqueror 3.1, Safari 1.1 */
+        opacity: 0;
+        /* CSS3 - Mozilla 1.7b +, Firefox 0.9 +, Safari 1.2+, Opera 9+ */
+    }
+
+#intro-house-sh {
+    background: url(../images/site/intro/house_sh.png) no-repeat;
+}
+
+#intro-house-1 {
+    background: url(../images/site/intro/house_1.png) no-repeat;
+}
+
+#intro-house-2 {
+    background: url(../images/site/intro/house_2.png) no-repeat;
+}
+
+#intro-house-3 {
+    background: url(../images/site/intro/house_3.png) no-repeat;
+}
+
+#intro-house-4 {
+    background: url(../images/site/intro/house_4.png) no-repeat;
+}
+
+#intro-house-5 {
+    background: url(../images/site/intro/house_5.png) no-repeat;
+}
+
+#intro-house-6 {
+    background: url(../images/site/intro/house_6.png) no-repeat;
+}
+
+#intro-house-7 {
+    background: url(../images/site/intro/house_7.png) no-repeat;
+}
+
+#intro-house-8 {
+    background: url(../images/site/intro/house_8.png) no-repeat;
+}
+
+#intro-house-9 {
+    background: url(../images/site/intro/house_9.png) no-repeat;
+}
+
+#intro-house-10 {
+    background: url(../images/site/intro/house_10.png) no-repeat;
+}

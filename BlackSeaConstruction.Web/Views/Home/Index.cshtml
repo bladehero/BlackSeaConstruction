@@ -1,0 +1,103 @@
+﻿<div class="row">
+    <div class="col-12 col-md-6 col-lg-7 mb-3 mb-lg-0 animated fadeInLeft">
+        <p>
+            <h1>Welcome</h1>
+        </p>
+        <p>
+            We are Vancouver based company which is proud of the good reputation that we have built up over the
+            years. In our business, it is essential to build and maintain the right reputation, of which our
+            continued success is dependent on being recommended to new Contractors and winning
+            repeat business from existing Contractors. Customer satisfaction is paramount.
+        </p>
+        <ul class="our-services"></ul>
+    </div>
+    <div class="col-12 col-md-6 col-lg-5 m-auto animated fadeInUp">
+        <div class="card bg-warning text-white h-100">
+            <div id="carouselIndicators" class="carousel slide card-img-top" data-ride="carousel">
+                <ol class="carousel-indicators">
+                    <li data-target="#carouselIndicators" data-slide-to="0" class="active"></li>
+                    <li data-target="#carouselIndicators" data-slide-to="1"></li>
+                    <li data-target="#carouselIndicators" data-slide-to="2"></li>
+                </ol>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="~/images/thumbs/gallery/104-p.jpg" class="d-block w-100">
+                        <div class="carousel-caption d-none d-md-block text-warning">
+                            <h5>First label</h5>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="~/images/thumbs/gallery/22-p.jpg" class="d-block w-100">
+                        <div class="carousel-caption d-none d-md-block text-warning">
+                            <h5>Second label</h5>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="~/images/thumbs/gallery/72-p.jpg" class="d-block w-100">
+                        <div class="carousel-caption d-none d-md-block text-warning">
+                            <h5>Third label</h5>
+                        </div>
+                    </div>
+                </div>
+                <a class="carousel-control-prev" href="#carouselIndicators" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselIndicators" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+            <div class="card-body p-1 text-center">
+                <button type="button" class="btn btn-sm btn-dark text-warning readmore">read more</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Intro {
+    <div id="intro-bg"></div>
+    <div id="intro" class="d-none">
+        <div id="intro-pages-0">
+            <div id="intro-pages-1"></div>
+        </div>
+        <div id="intro-logo-3d"></div>
+        <div id="intro-house">
+            <div id="intro-house-sh"></div>
+            <div id="intro-house-9"></div>
+            <div id="intro-house-10"></div>
+
+            <div id="intro-house-1"></div>
+            <div id="intro-house-2"></div>
+
+            <div id="intro-house-3"></div>
+            <div id="intro-house-4"></div>
+
+            <div id="intro-house-5"></div>
+            <div id="intro-house-6"></div>
+
+            <div id="intro-house-7"></div>
+            <div id="intro-house-8"></div>
+        </div>
+        <div id="intro-helmet"></div>
+    </div>
+}
+
+@section Scripts{
+    <script src="~/js/intro.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#link-about-us').addClass('active');
+
+            if ($(window).width() > 800) {
+                homeIntro();
+            } else {
+                $('#intro-bg').removeClass('fadeIn').addClass('animated fadeOut');
+                setTimeout(function () {
+                    $('#intro-bg').hide();
+                }, 800);
+            }
+        });
+    </script>
+}

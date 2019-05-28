@@ -1,0 +1,47 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row" id="service-tab">
+    <div class="col-12 animated slideInLeft">
+        <p>
+            <h1>Our services</h1>
+        </p>
+        <p>
+            We are pleased to offer wide variety of services from structural wood framing or small renovation
+            to a commercial building or multi-family being build.
+            Be it small or big work, we could tackle it all.
+        </p>
+    </div>
+    <div class="col-12">
+        <ul class="our-services">
+            <li>
+                New Construction
+                <ul>
+                    <li><a href="http://bsco.ca/en/our-services/new-construction/general-contracting-project-management/">General Contracting/Project Management</a></li>
+                    <li><a href="http://bsco.ca/en/our-services/new-construction/licensed-architectural-drawings/">Licensed Architectural Drawings</a></li>
+                    <li><a href="http://bsco.ca/en/our-services/new-construction/structural-wood-framing/">Structural Wood Framing</a></li>
+                    <li><a href="http://bsco.ca/en/our-services/new-construction/foundation-forming/">Foundation Forming</a></li>
+                </ul>
+            </li>
+            <li>
+                Renovations
+                <ul>
+                    <li><a href="http://bsco.ca/en/our-services/renovations/general-contracting-project-management/">General Contracting/Project Management</a></li>
+                    <li><a href="http://bsco.ca/en/our-services/renovations/structural-wood-framing/">Structural Wood Framing</a></li>
+                    <li><a href="http://bsco.ca/en/our-services/renovations/demolition/">Demolition</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('#link-our-services').addClass('active');
+            $('.our-services').parent().addClass('animated slideInLeft')
+        });
+    </script>
+}

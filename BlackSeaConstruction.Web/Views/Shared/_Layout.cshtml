@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>*Black Sea Construction</title>
+    <meta name="description"
+          content="We are Vancouver based company which is proud of the good reputation that we have built up over the years. In our business, it is essential to build and maintain the right reputation, of which our continued success is dependent on being recommended to new Contractors and winning repeat business from existing Contractors. Customer satisfaction is paramount.">
+    <meta name="language" content="English">
+    <meta name="robots" content="NOODP, follow, index">
+    <meta property="og:url" content="">
+    <meta property="og:title" content="Black Sea Construction">
+    <meta property="og:image" content="images/site/logo.png">
+    <link rel="canonical" href="">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+    <link href="~/css/site.css" type="text/css" rel="stylesheet" media="screen">
+</head>
+<body>
+    <div class="container-fluid">
+        <header class="m-0 m-auto">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-warning rounded shadow-lg">
+                <a href="@Url.Action("Index", "Home")" class="logo"><img class="bg-white p-2 rounded-lg shadow-lg" src="~/images/site/logo.png" /></a>
+                <div class="helmet d-none d-md-block"><img src="~/images/site/helmet.png" /></div>
+                <button class="navbar-toggler ml-auto m-md-auto" type="button" data-toggle="collapse" data-target="#topmenu" aria-controls="topmenu" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-center" id="topmenu">
+                    <ul class="navbar-nav text-right text-md-center">
+                        <li class="nav-item">
+                            <a class="nav-link font-weight-bold" href="@Url.Action("Index", "Home")" id="link-about-us">About us</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link font-weight-bold" href="@Url.Action("Services", "Home")" id="link-our-services">Our services</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link font-weight-bold" href="@Url.Action("Works", "Home")" id="link-our-works">Our works</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link font-weight-bold" href="#" id="link-contact-us">Contact us</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <section class="mt-5">
+            <div id="bg-obj">
+                <div id="bg-obj-cont">
+                    <div id="projects"></div>
+                    <div id="chisel"></div>
+                    <div id="hands"></div>
+                </div>
+            </div>
+            <div id="cont-bg">
+                <div class="content h-100 border-warning border p-4 animated fadeIn">
+                    @RenderBody()
+                </div>
+                <div id="hammer" class="d-none d-lg-block"></div>
+                <div id="roulette"></div>
+                <!--Intro-->
+                @RenderSection("Intro", false)
+                <!--Intro end-->
+            </div>
+        </section>
+        <footer class="row justify-content-center mt-3 mb-2">
+            <div class="col-8 col-md-6 col-lg-4 text-center rounded p-1">
+                Copyright &#0169; 2014 - @DateTime.Now.Year. All rights reserved.
+                <br />
+                BSCo | <a href="#" class="stretched-link text-white">Privacy policy</a>
+            </div>
+        </footer>
+    </div>
+
+    <!--Scripts section-->
+    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="js/site.js"></script>
+    <!--Scripts section end-->
+    <!--Additional scripts-->
+    @RenderSection("Scripts", false)
+    <!--Additional scripts end-->
+</body>
+</html>
