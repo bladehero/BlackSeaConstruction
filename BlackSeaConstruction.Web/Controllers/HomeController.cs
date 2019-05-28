@@ -19,5 +19,10 @@ namespace BlackSeaConstruction.Web.Controllers
         {
             return View();
         }
+
+        public IActionResult Contact()
+        {
+            return View();
+        }
     }
 }

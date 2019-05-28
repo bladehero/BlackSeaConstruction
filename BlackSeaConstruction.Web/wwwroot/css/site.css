@@ -73,7 +73,7 @@ header {
     header nav {
         position: relative;
         margin: auto;
-        max-width: 980px;
+        max-width: 1200px;
         display: table;
     }
 
@@ -185,7 +185,7 @@ section {
 #cont-bg {
     position: relative;
     display: block;
-    max-width: 980px;
+    max-width: 1200px;
     margin: auto;
     min-height: 400px;
 }
@@ -360,7 +360,7 @@ footer div {
     position: relative;
     margin: auto;
     width: 90%;
-    max-width: 980px;
+    max-width: 1200px;
     min-width: 583px;
     display: table;
 }
@@ -443,6 +443,13 @@ footer div {
 .list-group-item.active {
     border-color: #ffc107 !important;
 }
+
+.gallery-image {
+    width: 100%;
+    height: auto;
+    vertical-align: middle;
+    margin: 5px;
+
 
 #intro-helmet {
     position: absolute;
