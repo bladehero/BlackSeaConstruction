@@ -13,9 +13,12 @@ namespace BlackSeaConstruction.Web
 {
     public class Startup
     {
+        public static string ConnectionString { get; private set; }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            ConnectionString = Configuration.GetConnectionString("DefaultConnection");
         }
 
         public IConfiguration Configuration { get; }
@@ -29,7 +32,6 @@ namespace BlackSeaConstruction.Web
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
