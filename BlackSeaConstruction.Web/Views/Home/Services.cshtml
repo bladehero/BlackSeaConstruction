@@ -1,43 +1,56 @@
-﻿@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
+﻿@model BlackSeaConstruction.Web.Models.ServicesVM
+@using static BlackSeaConstruction.Web.Extensions.Extensions.ImageExtensions;
+
+
 
 <div class="row" id="service-tab">
-    <div class="col-12 animated slideInLeft">
-        <p>
-            <h1>Our services</h1>
-        </p>
-        <p>
-            We are pleased to offer wide variety of services from structural wood framing or small renovation
-            to a commercial building or multi-family being build.
-            Be it small or big work, we could tackle it all.
-        </p>
-    </div>
-    <div class="col-12 col-lg-6">
-        <ul class="our-services">
-            <li>
-                New Construction
-                <ul>
-                    <li><a href="">General Contracting/Project Management</a></li>
-                    <li><a href="">Licensed Architectural Drawings</a></li>
-                    <li><a href="">Structural Wood Framing</a></li>
-                    <li><a href="">Foundation Forming</a></li>
-                </ul>
-            </li>
-        </ul>
-    </div>
-    <div class="col-12 col-lg-6">
-        <ul class="our-services">
-            <li>
-                Renovations
-                <ul>
-                    <li><a href="">General Contracting/Project Management</a></li>
-                    <li><a href="">Structural Wood Framing</a></li>
-                    <li><a href="">Demolition</a></li>
-                </ul>
-            </li>
-        </ul>
-    </div>
+    @if (Model.Service == null)
+    {
+        <div class="col-12 animated slideInLeft">
+            <p>
+                <h1>Our services</h1>
+            </p>
+            <p>
+                We are pleased to offer wide variety of services from structural wood framing or small renovation
+                to a commercial building or multi-family being build.
+                Be it small or big work, we could tackle it all.
+            </p>
+        </div>
+    }
+    else
+    {
+        <div class="col-12 animated slideInUp">
+            <h1>Our services › @Model.Service.ServiceName</h1>
+            <h2>@Model.Service.ServiceType</h2>
+            <p>
+                @Model.Service.Description
+            </p>
+            <div class="row my-2">
+                @foreach (var image in Model.Service.Images)
+                {
+                    <div class="col-6 col-md-4 col-lg-3">
+                        <img src="~/@ServicesImage(image)" class="img-thumbnail shadow w-100">
+                    </div>
+                }
+            </div>
+        </div>
+    }
+    @foreach (var type in Model.Services)
+    {
+        <div class="col-12 col-lg-6">
+            <ul class="our-services">
+                <li>
+                    @type.TypeName
+                    <ul>
+                        @foreach (var service in type.Services)
+                        {
+                            <li><a href="@Url.Action("Services", "Home", new { id = service.Id })">@service.ServiceName</a></li>
+                        }
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    }
 </div>
 
 

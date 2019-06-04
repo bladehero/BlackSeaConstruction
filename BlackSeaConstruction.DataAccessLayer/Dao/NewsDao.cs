@@ -8,6 +8,6 @@ namespace BlackSeaConstruction.DataAccessLayer.Dao
     {
         public NewsDao(IDbConnection connection) : base("dbo.News", connection) { }
 
-        public IEnumerable<News> GetLastNews(int count) => Query($"select top {count} * from {TableName}");
+        public IEnumerable<News> GetLastNews(int count) => Query($"select top {count} * from {TableName} order by DateCreated");
     }
 }

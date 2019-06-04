@@ -131,3 +131,24 @@ if not exists (select 1
     IsDeleted bit not null default(0)
   );
 go
+
+merge dbo.News trg
+using 
+(
+  select n.Header
+       , n.[Description]
+       , n.[Image]
+       , n.Link
+  from 
+  (
+    values ('Header', 'Description', null, 'http://facebook.com')
+         , ('Header1', 'Description1', null, 'http://google.com')
+  ) n(Header, [Description], [Image], Link)
+) as src
+on (trg.Header = src.Header)
+when not matched by target then  
+  insert (Header, Description, Image, Link)
+  values (src.Header, src.[Description], src.[Image], src.Link)
+  ;
+go
+

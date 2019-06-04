@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BlackSeaConstruction.Web.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BlackSeaConstruction.Web.Controllers
 {
@@ -6,18 +7,31 @@ namespace BlackSeaConstruction.Web.Controllers
     {
         public IActionResult Index()
         {
-            var news = UnitOfWork.News.GetAllNews();
-            return View();
+            var model = new IndexVM
+            {
+                News = UnitOfWork.News.GetNews()
+            };
+            return View(model);
         }
 
-        public IActionResult Services()
+        public IActionResult Services(int? id = null)
         {
-            return View();
+            var model = new ServicesVM
+            {
+                Services = UnitOfWork.Services.GetAllServiceTypes(),
+                Service = UnitOfWork.Services.GetServiceById(id)
+            };
+            return View(model);
         }
 
-        public IActionResult Works()
+        public IActionResult Works(int? id = null)
         {
-            return View();
+            var model = new WorksVM
+            {
+                Projects = UnitOfWork.Projects.GetAllProjects(),
+                Project = UnitOfWork.Projects.GetProjectById(id)
+            };
+            return View(model);
         }
 
         public IActionResult Contact()
