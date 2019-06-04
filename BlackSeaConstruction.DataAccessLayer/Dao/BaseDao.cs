@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace BlackSeaConstruction.DataAccessLayer.Dao
 {
-    public class BaseDao<T> : DataAccessObject, IEnumerable<T>, IEnumerable, IDisposable where T : BaseEntity
+    public class BaseDao<T> : DataAccessObject, IEnumerable<T>, IEnumerable where T : BaseEntity
     {
         protected string TableName { get; set; }
 
@@ -17,18 +17,21 @@ namespace BlackSeaConstruction.DataAccessLayer.Dao
             TableName = table;
         }
 
+        protected string SelectFromString => $"select * from {TableName}";
+
         public IEnumerator GetEnumerator() => FindAll().GetEnumerator();
         IEnumerator<T> IEnumerable<T>.GetEnumerator() => FindAll().GetEnumerator();
 
         public int Count() => Connection.QueryFirstOrDefault<int>($"select count(Id) from {TableName}");
 
-        public virtual IEnumerable<T> FindAll() => Connection.Query<T>($"select * from {TableName}");
-        public virtual IEnumerable<T> Find(Func<T, bool> predicate) => Connection.Query<T>($"select * from {TableName}").Where(predicate);
-        public virtual T FirstOrDefault(Func<T, bool> predicate) => Connection.Query<T>($"select * from {TableName}").FirstOrDefault(predicate);
+        public T FindById(int id) => Connection.QueryFirstOrDefault<T>($"select top 1 * from {TableName} where Id = {id}");
+        public virtual IEnumerable<T> FindAll(bool withDeleted = false) => Connection.Query<T>($"{SelectFromString}{(withDeleted ? string.Empty : " where IsDeleted = 0")}");
+        public virtual IEnumerable<T> Find(Func<T, bool> predicate, bool withDeleted = false) => Connection.Query<T>($"{SelectFromString}{(withDeleted ? string.Empty : " where IsDeleted = 0")}").Where(predicate);
+        public virtual T FirstOrDefault(Func<T, bool> predicate, bool withDeleted = false) => Connection.QueryFirstOrDefault<T>($"select top 1 * from {TableName}{(withDeleted ? string.Empty : " where IsDeleted = 0")}");
 
-        public virtual IEnumerable<T> Random(int count)
+        public virtual IEnumerable<T> Random(int count, bool withDeleted = false)
         {
-            var items = FindAll();
+            var items = FindAll(withDeleted);
             if (count > Count())
             {
                 return items;
@@ -51,7 +54,7 @@ namespace BlackSeaConstruction.DataAccessLayer.Dao
                 return randomList;
             }
         }
-        public virtual T FirstOrDefaultRandom()
+        public virtual T FirstOrDefaultRandom(bool withDeleted = false)
         {
             var count = Count();
             if (count == 0)
@@ -59,7 +62,7 @@ namespace BlackSeaConstruction.DataAccessLayer.Dao
                 return null;
             }
             Random random = new Random();
-            return FindAll().ToList()[random.Next(count)];
+            return FindAll(withDeleted).ToList()[random.Next(count)];
         }
 
         public virtual int Insert(T item)
@@ -77,5 +80,8 @@ namespace BlackSeaConstruction.DataAccessLayer.Dao
         public virtual bool Delete(int id) => Connection.Execute($"update {TableName} set IsDeleted = 1 where Id = {id}") > 0;
         public virtual bool Delete(T item) => Delete(item.Id);
         public virtual bool Merge(T item) => item?.Id == 0 ? Insert(item) > 0 : Update(item);
+
+        protected IEnumerable<T> Query(string sql) => Connection.Query<T>(sql);
+        protected T QueryFirstOrDefault(string sql) => Connection.QueryFirstOrDefault<T>(sql);
     }
 }

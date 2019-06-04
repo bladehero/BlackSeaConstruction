@@ -3,7 +3,7 @@ using System.Data;
 
 namespace BlackSeaConstruction.BusinessLogicLayer.BusinessLogicLayers
 {
-    public class ServiceBLL
+    public class ServiceBLL : BaseBLL
     {
         ServiceDao services;
         ServiceImageDao serviceImages;

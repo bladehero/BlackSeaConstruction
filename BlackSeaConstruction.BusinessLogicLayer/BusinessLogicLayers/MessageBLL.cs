@@ -3,7 +3,7 @@ using System.Data;
 
 namespace BlackSeaConstruction.BusinessLogicLayer.BusinessLogicLayers
 {
-    public class MessageBLL
+    public class MessageBLL : BaseBLL
     {
         MessageDao messages;
 

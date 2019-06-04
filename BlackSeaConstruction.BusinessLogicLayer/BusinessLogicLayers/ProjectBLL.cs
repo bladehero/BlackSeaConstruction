@@ -3,7 +3,7 @@ using System.Data;
 
 namespace BlackSeaConstruction.BusinessLogicLayer.BusinessLogicLayers
 {
-    public class ProjectBLL
+    public class ProjectBLL : BaseBLL
     {
         ProjectDao projects;
         ProjectSectionDao projectSections;
@@ -15,5 +15,7 @@ namespace BlackSeaConstruction.BusinessLogicLayer.BusinessLogicLayers
             projectSections = new ProjectSectionDao(connection);
             projectSectionImages = new ProjectSectionImageDao(connection);
         }
+
+
     }
 }

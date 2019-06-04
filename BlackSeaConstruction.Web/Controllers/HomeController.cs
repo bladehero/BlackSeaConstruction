@@ -2,10 +2,11 @@
 
 namespace BlackSeaConstruction.Web.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         public IActionResult Index()
         {
+            var news = UnitOfWork.News.GetAllNews();
             return View();
         }
 

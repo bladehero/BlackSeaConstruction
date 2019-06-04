@@ -55,3 +55,7 @@ D:\Projects\BlackSeaConstruction\BlackSeaConstruction.Web\obj\Debug\netcoreapp2.
 D:\Projects\BlackSeaConstruction\BlackSeaConstruction.Web\obj\Debug\netcoreapp2.1\BlackSeaConstruction.Web.dll
 D:\Projects\BlackSeaConstruction\BlackSeaConstruction.Web\obj\Debug\netcoreapp2.1\BlackSeaConstruction.Web.pdb
 D:\Projects\BlackSeaConstruction\BlackSeaConstruction.Web\obj\Debug\netcoreapp2.1\BlackSeaConstruction.Web.csproj.CopyComplete
+D:\Projects\BlackSeaConstruction\BlackSeaConstruction.Web\bin\Debug\netcoreapp2.1\BlackSeaConstruction.BusinessLogicLayer.dll
+D:\Projects\BlackSeaConstruction\BlackSeaConstruction.Web\bin\Debug\netcoreapp2.1\BlackSeaConstruction.DataAccessLayer.dll
+D:\Projects\BlackSeaConstruction\BlackSeaConstruction.Web\bin\Debug\netcoreapp2.1\BlackSeaConstruction.BusinessLogicLayer.pdb
+D:\Projects\BlackSeaConstruction\BlackSeaConstruction.Web\bin\Debug\netcoreapp2.1\BlackSeaConstruction.DataAccessLayer.pdb
