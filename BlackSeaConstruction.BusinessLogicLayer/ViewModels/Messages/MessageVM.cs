@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace BlackSeaConstruction.BusinessLogicLayer.ViewModels.Messages
 {
@@ -7,9 +8,15 @@ namespace BlackSeaConstruction.BusinessLogicLayer.ViewModels.Messages
         public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        [Required]
+        [EmailAddress]
         public string Email { get; set; }
+        [Phone]
+        [Required(AllowEmptyStrings = true)]
         public string Phone { get; set; }
+        [Required]
         public string Subject { get; set; }
+        [Required]
         public string Text { get; set; }
         public string Status { get; set; }
         public DateTime ReceivedAt { get; set; }

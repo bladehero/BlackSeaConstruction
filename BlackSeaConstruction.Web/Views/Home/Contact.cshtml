@@ -1,8 +1,4 @@
-﻿@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-
-<div class="row animated slideInUp">
+﻿<div class="row animated slideInUp">
     <div class="col">
         <h1>Contact us</h1>
         <p>
@@ -29,28 +25,28 @@
         <form>
             <div class="form-row">
                 <div class="col">
-                    <input type="text" class="form-control" placeholder="Your first name">
+                    <input type="text" class="form-control" placeholder="Your first name" name="FirstName">
                 </div>
                 <div class="col">
-                    <input type="text" class="form-control" placeholder="Your last name">
-                </div>
-            </div>
-            <div class="form-row mt-2">
-                <div class="col">
-                    <input type="text" class="form-control" placeholder="Your email" required>
-                </div>
-                <div class="col">
-                    <input type="text" class="form-control" placeholder="Your phone">
+                    <input type="text" class="form-control" placeholder="Your last name" name="LastName">
                 </div>
             </div>
             <div class="form-row mt-2">
                 <div class="col">
-                    <input type="text" class="form-control" placeholder="Subject" required>
+                    <input type="text" class="form-control" placeholder="Your email" required name="Email">
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control" placeholder="Your phone" name="Phone">
                 </div>
             </div>
             <div class="form-row mt-2">
                 <div class="col">
-                    <textarea class="form-control" placeholder="Message" required></textarea>
+                    <input type="text" class="form-control" placeholder="Subject" required name="Subject">
+                </div>
+            </div>
+            <div class="form-row mt-2">
+                <div class="col">
+                    <textarea class="form-control" placeholder="Message" required name="Text"></textarea>
                 </div>
             </div>
         </form>
@@ -62,29 +58,55 @@
 </div>
 
 @section Scripts{
-    <script>
-        $(document).ready(function () {
-            $('#link-contact-us').addClass('active');
+<script>
+    $(document).ready(function () {
+        $('#link-contact-us').addClass('active');
 
-            $('#send-btn').click(function () {
-                if (false) {
+        $('form input,textarea').keyup(function () {
+            $(this).removeClass('border border-danger');
+        });
 
-                }
-                else {
+        $('#send-btn').click(function () {
+            $.ajax({
+                url: '@Url.Action("SendMessage", "Home")',
+                method: 'POST',
+                data: $('form').serialize(),
+                success: function (data) {
+                    if (data.success) {
+                        Swal.fire(
+                            'Success!',
+                            'Your message was sent',
+                            'success'
+                        ).then((result) => {
+                            if (result.value) {
+                                $('form input,textarea').val(null);
+                            }
+                        });
+                    }
+                    else {
+                        Swal.fire(
+                            'Error!',
+                            data.message,
+                            'error'
+                        ).then((result) => {
+                            if (result.value) {
+                                $(data.selectors).addClass('border border-danger');
+                            }
+                        });
+                    }
+                },
+                error: function () {
                     Swal.fire(
-                        'Success!',
-                        'Your message was sent',
-                        'success'
-                    ).then((result) => {
-                        if (result.value) {
-                            $('form input,textarea').val(null);
-                        }
-                    });
+                        'Error!',
+                        'Something go wrong.',
+                        'error'
+                    );
                 }
-            });
-            $('#clear-btn').click(function () {
-                $('form input,textarea').val(null);
             });
         });
-    </script>
+        $('#clear-btn').click(function () {
+            $('form input,textarea').val(null);
+        });
+    });
+</script>
 }

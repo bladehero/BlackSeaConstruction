@@ -1,5 +1,10 @@
-﻿using BlackSeaConstruction.Web.Models;
+﻿using BlackSeaConstruction.BusinessLogicLayer.ViewModels.Messages;
+using BlackSeaConstruction.Web.Extensions;
+using BlackSeaConstruction.Web.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System;
+using System.Linq;
 
 namespace BlackSeaConstruction.Web.Controllers
 {
@@ -37,6 +42,35 @@ namespace BlackSeaConstruction.Web.Controllers
         public IActionResult Contact()
         {
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult SendMessage(MessageVM messageVM)
+        {
+            var success = true;
+            var message = string.Empty;
+            var selectors = string.Empty;
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    messageVM.Status = Status.P.ToString();
+                    UnitOfWork.Message.MergeMessage(messageVM);
+                }
+                catch (Exception)
+                {
+                    success = false;
+                    message = "Internal error. Please, contact support team!";
+                }
+            }
+            else
+            {
+                success = false;
+                message = $"Errors occured:<br /> -{string.Join("<br />- ", ModelState.Values.Where(x => x.ValidationState == ModelValidationState.Invalid).SelectMany(x => x.Errors.Select(e => e.ErrorMessage)))}";
+                selectors = string.Join(',', ModelState.AllErrors().Select(x => $"[name={x.Key}]"));
+            }
+
+            return Json(new { success, message, selectors });
         }
     }
 }

@@ -467,6 +467,10 @@ footer div {
     border-color: #ffc107 !important;
 }
 
+input.form-control {
+    border-width: 3px;
+}
+
 #intro-helmet {
     position: absolute;
     width: 200px;
