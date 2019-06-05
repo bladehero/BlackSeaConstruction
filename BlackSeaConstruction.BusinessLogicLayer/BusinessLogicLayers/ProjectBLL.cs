@@ -35,7 +35,8 @@ namespace BlackSeaConstruction.BusinessLogicLayer.BusinessLogicLayers
                         Id = x.Id,
                         ProjectName = m.ProjectName,
                         SectionName = x.SectionName,
-                        Images = _projectSectionImages.GetSectionImagesBySectionId(m.Id).Select(s => s.Image)
+                        Description = x.Description,
+                        Images = _projectSectionImages.GetSectionImagesBySectionId(x.Id).Select(s => s.Image)
                     }).ToList();
                 });
                 cfg.CreateMap<ProjectVM, Project>();

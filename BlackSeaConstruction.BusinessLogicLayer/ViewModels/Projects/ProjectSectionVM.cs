@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace BlackSeaConstruction.BusinessLogicLayer.ViewModels.Projects
 {
@@ -8,6 +6,7 @@ namespace BlackSeaConstruction.BusinessLogicLayer.ViewModels.Projects
     {
         public int Id { get; set; }
         public string SectionName { get; set; }
+        public string Description { get; set; }
         public string ProjectName { get; set; }
         public IEnumerable<string> Images { get; set; }
     }

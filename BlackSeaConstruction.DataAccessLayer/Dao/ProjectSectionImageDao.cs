@@ -10,7 +10,7 @@ namespace BlackSeaConstruction.DataAccessLayer.Dao
 
         public IEnumerable<ProjectSectionImage> GetSectionImagesBySectionId(int sectionId)
         {
-            return Query($"{SelectFromString} where SectionId {sectionId}");
+            return Query($"{SelectFromString} where SectionId = {sectionId}");
         }
     }
 }
