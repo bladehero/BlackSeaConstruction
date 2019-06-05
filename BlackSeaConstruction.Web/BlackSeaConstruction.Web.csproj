@@ -5,17 +5,44 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\images\services\104-p.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\images\services\22-p.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\images\services\30-p.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\images\services\32-p.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\images\services\34-p.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\images\services\51-p.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\images\services\54-p.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\images\services\58-p.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\images\services\72-p.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\images\services\97-p.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\images\news\" />
     <Folder Include="wwwroot\lib\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\BlackSeaConstruction.BusinessLogicLayer\BlackSeaConstruction.BusinessLogicLayer.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\images\services\23-p.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\images\services\24-p.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\images\services\31-p.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\images\services\33-p.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

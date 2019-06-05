@@ -39,7 +39,7 @@ namespace BlackSeaConstruction.BusinessLogicLayer.BusinessLogicLayers
             return newsVM;
         }
 
-        public IEnumerable<NewsVM> GetNews(int count = 5)
+        public IEnumerable<NewsVM> GetNews(int count = 7)
         {
             var news = _news.GetLastNews(count);
             var newsVM = Map<IEnumerable<News>, IEnumerable<NewsVM>>(news);

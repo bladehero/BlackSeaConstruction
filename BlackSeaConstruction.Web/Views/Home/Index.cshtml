@@ -35,8 +35,10 @@
                     @foreach (var news in Model.News)
                     {
                         <div class="carousel-item@(isActive ? " active" : "")" data-link="@news.Link" data-description="@news.Description">
-                            <img src="~/@NewsImage(news.Image)" class="d-block w-100">
-                            <div class="carousel-caption d-none d-md-block text-warning">
+                            <a href="@news.Link">
+                                <img src="~/@NewsImage(news.Image)" class="d-block w-100">
+                            </a>
+                            <div class="carousel-caption text-warning">
                                 <h5>@news.Header</h5>
                             </div>
                         </div>

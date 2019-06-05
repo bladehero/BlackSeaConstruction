@@ -57,7 +57,7 @@ using BlackSeaConstruction.Web;
             WriteLiteral("<!DOCTYPE html>\r\n<html>\r\n");
             EndContext();
             BeginContext(25, 1450, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("head", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "5cf5eb05feff4e6f94bce9d34ae9c010", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("head", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "8b43e8d4e2dc4f45964c1b3fd95bb669", async() => {
                 BeginContext(31, 1359, true);
                 WriteLiteral(@"
     <meta charset=""utf-8"">
@@ -79,7 +79,7 @@ using BlackSeaConstruction.Web;
     ");
                 EndContext();
                 BeginContext(1390, 76, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("link", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagOnly, "c20db82e5f5042c9a6f437824631d739", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("link", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagOnly, "0c861c93b2f9428d9110a6758909a2e8", async() => {
                 }
                 );
                 __Microsoft_AspNetCore_Mvc_Razor_TagHelpers_UrlResolutionTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.Razor.TagHelpers.UrlResolutionTagHelper>();
@@ -115,7 +115,7 @@ using BlackSeaConstruction.Web;
             WriteLiteral("\r\n");
             EndContext();
             BeginContext(1477, 3893, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("body", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "cf0fae950de7401397d70a8d012256c6", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("body", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "6715c5dc1dc84cfa9fd56536a6f3fd51", async() => {
                 BeginContext(1483, 184, true);
                 WriteLiteral("\r\n    <div class=\"container-fluid\">\r\n        <header class=\"m-0 m-auto\">\r\n            <nav class=\"navbar navbar-expand-lg navbar-dark bg-warning rounded shadow-lg\">\r\n                <a");
                 EndContext();
@@ -130,7 +130,7 @@ WriteAttributeValue("", 1674, Url.Action("Index", "Home"), 1674, 28, false);
                 WriteLiteral(" class=\"logo\">");
                 EndContext();
                 BeginContext(1717, 78, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("img", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "a929890dd7354599abb42eea03575245", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("img", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "07b4c169d6d04952b6356d8ca7fb3f06", async() => {
                 }
                 );
                 __Microsoft_AspNetCore_Mvc_Razor_TagHelpers_UrlResolutionTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.Razor.TagHelpers.UrlResolutionTagHelper>();
@@ -149,7 +149,7 @@ WriteAttributeValue("", 1674, Url.Action("Index", "Home"), 1674, 28, false);
                 WriteLiteral("</a>\r\n                <div class=\"helmet d-none d-md-block\">");
                 EndContext();
                 BeginContext(1855, 38, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("img", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "6d82cc68a32441738e070893a37c94da", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("img", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "abae4e144c56429fa0d4663f2bf476e6", async() => {
                 }
                 );
                 __Microsoft_AspNetCore_Mvc_Razor_TagHelpers_UrlResolutionTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.Razor.TagHelpers.UrlResolutionTagHelper>();
