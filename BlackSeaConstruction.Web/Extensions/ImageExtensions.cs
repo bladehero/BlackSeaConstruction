@@ -10,9 +10,11 @@ namespace BlackSeaConstruction.Web.Extensions
         public const string ImageFolder = "images";
         public const string NewsFolder = "news";
         public const string ServicesFolder = "services";
+        public const string WorksFolder = "works";
 
         public static string NewsImage(string source) => ImageForFolder(source, NewsFolder);
         public static string ServicesImage(string source) => ImageForFolder(source, ServicesFolder);
+        public static string WorksImage(string source) => ImageForFolder(source, WorksFolder);
 
         public static string ImageForFolder(string source, string folder)
         {

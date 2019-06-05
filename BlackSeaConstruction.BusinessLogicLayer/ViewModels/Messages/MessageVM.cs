@@ -12,7 +12,6 @@ namespace BlackSeaConstruction.BusinessLogicLayer.ViewModels.Messages
         [EmailAddress]
         public string Email { get; set; }
         [Phone]
-        [Required(AllowEmptyStrings = true)]
         public string Phone { get; set; }
         [Required]
         public string Subject { get; set; }
