@@ -16,47 +16,16 @@
         <div class="row mt-5">
             <div class="col">
                 <div class="tab-content" id="nav-tabContent">
-                    @foreach (var project in Model.Projects)
-                    {
-                        <div class="tab-pane fade@(((id.HasValue && project.Id == id.Value) || (!id.HasValue && isActive)) ? " show active": "")" id="list-@project.Id" role="tabpanel" aria-labelledby="list-@project.Id-list">
-                            <div class="row">
-                                <div class="col-12 text-center text-lg-left">
-                                    <h1>@project.ProjectName</h1>
-                                    <p class="text-center text-lg-left">@project.Description</p>
-                                </div>
-                            </div>
-                            @foreach (var sect in project.ProjectSections)
-                            {
-                                <div class="row justify-content-center mt-3">
-                                    <div class="col-12 text-center">
-                                        <h1>@sect.SectionName</h1>
-                                        <p class="text-center">@sect.Description</p>
-                                    </div>
-                                    <div class="row justify-content-center mt-2 gallery w-100">
-                                        @foreach (var image in sect.Images)
-                                        {
-                                            <div class="col-6 col-md-4 col-lg-3">
-                                                <img src="~/@WorksImage(image)" class="img-thumbnail gallery-image shadow">
-                                            </div>
-                                        }
-                                    </div>
-                                </div>
-                            }
-                        </div>
-                        isActive = false;
-                    }
+                    @(await Html.PartialAsync("_Work", Model.Project))
                 </div>
             </div>
         </div>
     </div>
     <div class="col-12 col-md-5 col-lg-4 order-0 order-lg-1 mb-3 mb-md-0">
         <div class="list-group" id="list-tab" role="tablist">
-            @{
-                isActive = true;
-            }
             @foreach (var project in Model.Projects)
             {
-                <a class="list-group-item text-white bg-dark list-group-item-action@(((id.HasValue && project.Id == id.Value) || (!id.HasValue && isActive)) ? " active": "")" id="list-@project.Id-list" data-toggle="list" href="#list-@project.Id" role="tab">@project.ProjectName</a>
+                <a class="list-group-item text-white bg-dark list-group-item-action@(((id.HasValue && project.Id == id.Value) || (!id.HasValue && isActive)) ? " active": "") project-list-item" id="list-@project.Id-list" data-toggle="list" href="#list-@project.Id" role="tab" data-id="@project.Id">@project.ProjectName</a>
                 isActive = false;
             }
         </div>
@@ -103,6 +72,20 @@
                 }
                 $('#carouselModalControls .carousel-inner').html(html);
                 $('#gallery-modal').modal('show');
+            });
+            $('.project-list-item').click(function () {
+                debugger
+                if (!$('.tab-pane#list-' + $(this).data('id')).length) {
+                    $('.tab-pane').removeClass('show active');
+                    $.ajax({
+                        url: '@Url.Action("_Work", "Home")',
+                        method: 'GET',
+                        data: { id: $(this).data('id') },
+                        success: function (html) {
+                            $('#nav-tabContent').append(html);
+                        }
+                    });
+                }
             });
         });
     </script>

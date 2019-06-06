@@ -122,7 +122,7 @@ using static BlackSeaConstruction.Web.Extensions.ImageExtensions;
             WriteLiteral("                    <div class=\"col-6 col-md-4 col-lg-3\">\r\n                        ");
             EndContext();
             BeginContext(1094, 70, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("img", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagOnly, "75d8c88fd4e34d16963c79a3ab0c15f3", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("img", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagOnly, "03d282f9acc747498b0ed2eeeaa5dfa6", async() => {
             }
             );
             __Microsoft_AspNetCore_Mvc_Razor_TagHelpers_UrlResolutionTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.Razor.TagHelpers.UrlResolutionTagHelper>();

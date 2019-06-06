@@ -33,10 +33,16 @@ namespace BlackSeaConstruction.Web.Controllers
         {
             var model = new WorksVM
             {
-                Projects = UnitOfWork.Projects.GetAllProjects(),
+                Projects = UnitOfWork.Projects.GetAllProjectListItems(),
                 Project = UnitOfWork.Projects.GetProjectById(id)
             };
             return View(model);
+        }
+
+        public IActionResult _Work(int id)
+        {
+            var model = UnitOfWork.Projects.GetProjectById(id);
+            return PartialView(model);
         }
 
         public IActionResult Contact()

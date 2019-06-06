@@ -24,34 +24,27 @@ namespace BlackSeaConstruction.BusinessLogicLayer.BusinessLogicLayers
             {
                 cfg.CreateMap<ProjectSection, ProjectSectionVM>().AfterMap((m, vm) =>
                 {
-                    vm.Images = _projectSectionImages.GetSectionImagesBySectionId(m.Id).Select(z => z.Image);
+                    vm.Images = _projectSectionImages.GetSectionImagesBySectionId(m.Id);
                     vm.ProjectName = _projects.FindById(m.ProjectId)?.ProjectName;
                 });
                 cfg.CreateMap<ProjectSectionVM, ProjectSection>();
-                cfg.CreateMap<Project, ProjectVM>().AfterMap((m, vm) =>
-                {
-                    vm.ProjectSections = _projectSections.GetSectionsByProjectId(m.Id).Select(x => new ProjectSectionVM
-                    {
-                        Id = x.Id,
-                        ProjectName = m.ProjectName,
-                        SectionName = x.SectionName,
-                        Description = x.Description,
-                        Images = _projectSectionImages.GetSectionImagesBySectionId(x.Id).Select(s => s.Image)
-                    }).ToList();
-                });
+                cfg.CreateMap<Project, ProjectVM>();
                 cfg.CreateMap<ProjectVM, Project>();
             }).CreateMapper();
         }
 
         public ProjectVM GetProjectById(int? id)
         {
-            if (!id.HasValue)
-            {
-                return null;
-            }
-
-            var project = _projects.FindById(id.Value);
+            var project = id.HasValue ? _projects.FindById(id.Value) : _projects.FirstOrDefault();
             var projectVM = Map<Project, ProjectVM>(project);
+            projectVM.ProjectSections = _projectSections.GetSectionsByProjectId(project.Id).Select(x => new ProjectSectionVM
+            {
+                Id = x.Id,
+                ProjectName = project.ProjectName,
+                SectionName = x.SectionName,
+                Description = x.Description,
+                Images = _projectSectionImages.GetSectionImagesBySectionId(x.Id)
+            }).ToList();
             return projectVM;
         }
 
@@ -59,6 +52,17 @@ namespace BlackSeaConstruction.BusinessLogicLayer.BusinessLogicLayers
         {
             var projects = _projects.FindAll();
             var projectVMs = Map<IEnumerable<Project>, IEnumerable<ProjectVM>>(projects);
+            return projectVMs;
+        }
+
+        public IEnumerable<ProjectListItemVM> GetAllProjectListItems()
+        {
+            var projects = _projects.FindAll();
+            var projectVMs = projects.Select(x => new ProjectListItemVM
+            {
+                Id = x.Id,
+                ProjectName = x.ProjectName
+            });
             return projectVMs;
         }
     }

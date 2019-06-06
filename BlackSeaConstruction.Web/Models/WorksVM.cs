@@ -5,7 +5,7 @@ namespace BlackSeaConstruction.Web.Models
 {
     public class WorksVM
     {
-        public IEnumerable<ProjectVM> Projects { get; set; }
+        public IEnumerable<ProjectListItemVM> Projects { get; set; }
         public ProjectVM Project { get; set; }
     }
 }

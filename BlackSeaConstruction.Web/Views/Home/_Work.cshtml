@@ -1,0 +1,28 @@
+﻿@model BlackSeaConstruction.BusinessLogicLayer.ViewModels.Projects.ProjectVM
+@using static BlackSeaConstruction.Web.Extensions.ImageExtensions
+
+<div class="tab-pane fade show active" id="list-@Model.Id" role="tabpanel" aria-labelledby="list-@Model.Id-list">
+    <div class="row">
+        <div class="col-12 text-center text-lg-left">
+            <h1>@Model.ProjectName</h1>
+            <p class="text-center text-lg-left">@Model.Description</p>
+        </div>
+    </div>
+    @foreach (var sect in Model.ProjectSections)
+    {
+        <div class="row justify-content-center mt-3">
+            <div class="col-12 text-center">
+                <h1>@sect.SectionName</h1>
+                <p class="text-center">@sect.Description</p>
+            </div>
+            <div class="row justify-content-center mt-2 gallery w-100">
+                @foreach (var image in sect.Images)
+                {
+                    <div class="col-6 col-md-4 col-lg-3">
+                        <img src="~/@WorksImage(image)" class="img-thumbnail gallery-image shadow">
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>

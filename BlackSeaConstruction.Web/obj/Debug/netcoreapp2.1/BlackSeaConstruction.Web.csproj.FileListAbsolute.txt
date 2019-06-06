@@ -92,3 +92,4 @@ D:\BlackSeaConstruction\BlackSeaConstruction.Web\obj\Debug\netcoreapp2.1\BlackSe
 D:\BlackSeaConstruction\BlackSeaConstruction.Web\obj\Debug\netcoreapp2.1\BlackSeaConstruction.Web.csproj.CopyComplete
 D:\BlackSeaConstruction\BlackSeaConstruction.Web\obj\Debug\netcoreapp2.1\BlackSeaConstruction.Web.dll
 D:\BlackSeaConstruction\BlackSeaConstruction.Web\obj\Debug\netcoreapp2.1\BlackSeaConstruction.Web.pdb
+D:\Projects\BlackSeaConstruction\BlackSeaConstruction.Web\obj\Debug\netcoreapp2.1\Razor\Views\Home\_Work.g.cshtml.cs

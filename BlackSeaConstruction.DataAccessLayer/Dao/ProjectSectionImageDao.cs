@@ -1,4 +1,5 @@
 ﻿using BlackSeaConstruction.DataAccessLayer.Models;
+using Dapper;
 using System.Collections.Generic;
 using System.Data;
 
@@ -8,9 +9,10 @@ namespace BlackSeaConstruction.DataAccessLayer.Dao
     {
         public ProjectSectionImageDao(IDbConnection connection) : base("dbo.ProjectSectionImages", connection) { }
 
-        public IEnumerable<ProjectSectionImage> GetSectionImagesBySectionId(int sectionId)
+        public IEnumerable<string> GetSectionImagesBySectionId(int sectionId)
         {
-            return Query($"{SelectFromString} where SectionId = {sectionId}");
+            var result = Connection.Query<string>($"select [Image] from {TableName} where SectionId = {sectionId}");
+            return result;
         }
     }
 }
