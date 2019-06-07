@@ -62,19 +62,21 @@
 
 @section Scripts{
     <script>
+            function galleryClick() {
+                $('.gallery-image').off('click').click(function () {
+                    var children = $(this).parents('.gallery').children();
+                    var html = "";
+                    for (var i = 0; i < children.length; i++) {
+                        html += '<div class="carousel-item' + (i == 0 ? " active" : "") + '"><img class="d-block w-50 mx-auto" src="' + $($(children[i]).children()).attr('src') + '"></div>';
+                    }
+                    $('#carouselModalControls .carousel-inner').html(html);
+                    $('#gallery-modal').modal('show');
+                });
+            }
         $(document).ready(function () {
+            galleryClick();
             $('#link-our-works').addClass('active');
-            $('.gallery-image').click(function () {
-                var children = $(this).parents('.gallery').children();
-                var html = "";
-                for (var i = 0; i < children.length; i++) {
-                    html += '<div class="carousel-item' + (i == 0 ? " active" : "") + '"><img class="d-block w-50 mx-auto" src="' + $($(children[i]).children()).attr('src') + '"></div>';
-                }
-                $('#carouselModalControls .carousel-inner').html(html);
-                $('#gallery-modal').modal('show');
-            });
-            $('.project-list-item').click(function () {
-                debugger
+            $('.project-list-item').off('click').click(function () {
                 if (!$('.tab-pane#list-' + $(this).data('id')).length) {
                     $('.tab-pane').removeClass('show active');
                     $.ajax({
