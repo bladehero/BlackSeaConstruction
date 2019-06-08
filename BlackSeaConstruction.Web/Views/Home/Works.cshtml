@@ -39,7 +39,7 @@
                 var children = $(this).parents('.gallery').children();
                 var html = "";
                 for (var i = 0; i < children.length; i++) {
-                    html += '<div class="carousel-item h-100' + (i == 0 ? " active" : "") + '"><img class="d-block m-auto h-100" src="' + $($(children[i]).children()).attr('src') + '"></div>';
+                    html += '<div class="carousel-item h-100' + (i == $(children).index($(this).parent()) ? " active" : "") + '"><img class="d-block m-auto h-100" src="' + $($(children[i]).children()).attr('src') + '"></div>';
                 }
                 $('#carouselModalControls .carousel-inner').html(html);
                 $('#gallery').css('display', 'block').removeClass('fadeOut').addClass('fadeIn');
