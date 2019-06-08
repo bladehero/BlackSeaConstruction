@@ -451,15 +451,13 @@ footer div {
 
 .carousel-control-prev, .carousel-control-next {
     z-index: 999;
+    width: 10%;
 }
 
 .list-group-item.active {
     border-color: #ffc107 !important;
 }
 
-.carousel-control-prev, .carousel-control-next {
-    filter: invert(30%);
-}
 
 .img-thumbnail {
     padding: 0px;
