@@ -13,6 +13,10 @@
     {
       "library": "animate.css@3.7.0",
       "destination": "wwwroot/lib/animate.css/"
+    },
+    {
+      "library": "hover.css@2.3.1",
+      "destination": "wwwroot/lib/hover.css/"
     }
   ]
 }

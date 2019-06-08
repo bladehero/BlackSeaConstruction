@@ -15,17 +15,14 @@
                 <h1>@sect.SectionName</h1>
                 <p class="text-center">@sect.Description</p>
             </div>
-            <div class="row justify-content-center mt-2 gallery w-100">
+            <div class="row justify-content-center justify-content-lg-start mt-2 gallery w-100">
                 @foreach (var image in sect.Images)
                 {
-                    <div class="col-6 col-md-4 col-lg-3">
-                        <img src="~/@WorksImage(image)" class="img-thumbnail gallery-image shadow">
+                    <div class="col-6 col-md-4 mt-2">
+                        <img src="~/@WorksImage(image)" class="img-thumbnail gallery-image hvr-grow-shadow w-100">
                     </div>
                 }
             </div>
         </div>
     }
 </div>
-<script>
-    galleryClick();
-</script>

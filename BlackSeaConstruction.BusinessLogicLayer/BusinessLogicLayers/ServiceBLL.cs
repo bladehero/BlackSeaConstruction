@@ -24,21 +24,11 @@ namespace BlackSeaConstruction.BusinessLogicLayer.BusinessLogicLayers
             {
                 cfg.CreateMap<Service, ServiceVM>().AfterMap((m, vm) =>
                 {
-                    vm.Images = _serviceImages.GetServiceImageByServiceId(m.Id).Select(z => z.Image);
+                    vm.Images = _serviceImages.GetServiceImageByServiceId(m.Id);
                     vm.ServiceType = _serviceTypes.FindById(m.TypeId)?.TypeName;
                 });
                 cfg.CreateMap<ServiceVM, Service>();
-                cfg.CreateMap<ServiceType, ServiceTypeVM>().AfterMap((m, vm) =>
-                {
-                    vm.Services = _services.GetServicesByTypeId(m.Id).Select(x => new ServiceVM
-                    {
-                        Id = x.Id,
-                        Description = x.Description,
-                        ServiceName = x.ServiceName,
-                        ServiceType = vm.TypeName,
-                        Images = _serviceImages.GetServiceImageByServiceId(x.Id).Select(z => z.Image)
-                    }).ToList();
-                });
+                cfg.CreateMap<ServiceType, ServiceTypeVM>();
                 cfg.CreateMap<ServiceTypeVM, ServiceType>();
             }).CreateMapper();
         }
@@ -58,7 +48,16 @@ namespace BlackSeaConstruction.BusinessLogicLayer.BusinessLogicLayers
         public IEnumerable<ServiceTypeVM> GetAllServiceTypes()
         {
             var serviceTypes = _serviceTypes.FindAll();
-            var serviceTypeVMs = Map<IEnumerable<ServiceType>, IEnumerable<ServiceTypeVM>>(serviceTypes);
+            var serviceTypeVMs = serviceTypes.Select(x => new ServiceTypeVM
+            {
+                Id = x.Id,
+                TypeName = x.TypeName,
+                Services = _services.GetServicesByTypeId(x.Id).Select(s => new ServiceVM
+                {
+                    Id = s.Id,
+                    ServiceName = s.ServiceName
+                })
+            }).ToList();
             return serviceTypeVMs;
         }
     }

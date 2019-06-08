@@ -608,3 +608,51 @@ input.form-control {
 #intro-house-10 {
     background: url(../images/site/intro/house_10.png) no-repeat;
 }
+
+#gallery {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left: 0px;
+    top: 0px;
+    z-index: 998;
+    display: none;
+    background-color: rgba(52,58,64,.8);
+}
+
+#gallery-close {
+    position: fixed;
+    z-index: 999;
+    top: 7px;
+    right: 25px;
+    color: #fff;
+}
+
+.close-custom {
+    right: 32px;
+    top: 32px;
+    width: 32px;
+    height: 32px;
+    opacity: 0.4;
+}
+
+    .close-custom:hover {
+        opacity: 1;
+    }
+
+    .close-custom:before, .close-custom:after {
+        position: absolute;
+        left: 15px;
+        content: ' ';
+        height: 33px;
+        width: 2px;
+        background-color: rgb(255, 150, 0);
+    }
+
+    .close-custom:before {
+        transform: rotate(45deg);
+    }
+
+    .close-custom:after {
+        transform: rotate(-45deg);
+    }
