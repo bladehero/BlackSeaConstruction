@@ -340,9 +340,9 @@ h2 {
     clear: both;
 }
 
-.our-services-short li ul {
-    margin-bottom: 15px;
-}
+    .our-services-short li ul {
+        margin-bottom: 15px;
+    }
 
 footer div {
     font-family: 'Conv_MagistralC-Bold';
@@ -653,4 +653,23 @@ input.form-control {
 
     .close-custom:after {
         transform: rotate(-45deg);
+    }
+
+/* Grow Shadow */
+.hvr-grow-shadow {
+    display: inline-block;
+    vertical-align: middle;
+    -webkit-transform: perspective(1px) translateZ(0);
+    transform: perspective(1px) translateZ(0);
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+    -webkit-transition-duration: 0.2s;
+    transition-duration: 0.2s;
+    -webkit-transition-property: box-shadow, transform;
+    transition-property: box-shadow, transform;
+}
+
+    .hvr-grow-shadow:hover, .hvr-grow-shadow:focus, .hvr-grow-shadow:active {
+        box-shadow: 0px 10px 10px 0px rgba(255, 193, 7, 0.2);
+        -webkit-transform: scale(1.05);
+        transform: scale(1.05);
     }
