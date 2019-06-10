@@ -1,0 +1,150 @@
+﻿@model BlackSeaConstruction.Web.Areas.Admin.Models.MessagesVM
+@using static BlackSeaConstruction.Web.Extensions.EnumExtensions
+
+<div class="row animated fadeIn mt-2">
+    <div class="col-2 ml-2">
+        <select class="form-control form-control-sm" id="select-size">
+            @foreach (var size in BlackSeaConstruction.BusinessLogicLayer.ViewModels.PageVM.Sizes)
+            {
+                <option @(size == Model.Pages.Size ? "selected" : "")>@size</option>
+            }
+        </select>
+    </div>
+    <div class="col-2 text-white">
+        <div>
+            <input type="checkbox" id="isDeleted" name="isDeleted" @(Model.WithDeleted ? " checked" : "")>
+            <label for="isDeleted">With Deleted</label>
+        </div>
+    </div>
+    <div class="col-1 ml-auto mr-3">
+        <button type="button" class="btn btn-outline-light" id="search">Search</button>
+    </div>
+</div>
+<div class="row animated fadeInUp mt-2">
+    <div class="col-12">
+        <table class="table table-hover bg-light shadow rounded-bottom table-sm">
+            <thead>
+                <tr class="thead-dark text-center">
+                    <th scope="col">Id</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Surname</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Received At</th>
+                    <th scope="col">Status</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var message in Model.Messages)
+                {
+                    <tr class="text-center" data-id="@message.Id">
+                        <th class="pointer message-row" scope="row">@message.Id</th>
+                        <td class="pointer message-row">@message.FirstName</td>
+                        <td class="pointer message-row">@message.LastName</td>
+                        <td class="pointer message-row">@message.Phone</td>
+                        <td class="pointer message-row">@message.Email</td>
+                        <td class="pointer message-row">@message.ReceivedAt.ToString()</td>
+                        <th class="pointer message-row" scope="row">@message.Status.GetDescription()</th>
+                        <td class="pointer message-row delete-restore-btn" data-status="@message.IsDeleted.ToString().ToLower()">@(message.IsDeleted ? "✔" : "❌")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-auto ml-auto mr-2">
+        <div class="btn-group shadow" role="group">
+            <button type="button" class="btn btn-outline-light btn-sm" id="previous-page"><</button>
+            @{
+                foreach (var number in Model.Pages.Pages)
+                {
+                    if (number == Model.Pages.Number)
+                    {
+                        <button type="button" class="btn btn-outline-light btn-sm btn-page active"><b>@number</b></button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-outline-light btn-sm btn-page"><b>@number</b></button>
+                    }
+                }
+            }
+            <button type="button" class="btn btn-outline-light btn-sm" id="next-page">></button>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+    $(document).ready(function () {
+        $('#search').click(function () {
+            var size = $('#select-size :selected').text();
+            window.location.replace("@Url.Action("Index", "Messages", new { area = "Admin" })?size=" + size + "&withDeleted=" + $('#isDeleted').is(':checked'));
+        });
+
+        if (@Model.Pages.HasPreviousPage.ToString().ToLower()) {
+        $('#previous-page').click(function () {
+            url = '?size=' + $('#select-size').val() + '&number=' + @(Model.Pages.Number - 1) + "&withDeleted=" + $('#isDeleted').is(':checked');
+            window.location.replace(url);
+        });
+        } else {
+            $('#previous-page').addClass('disabled');
+        }
+
+        if (@Model.Pages.HasNextPage.ToString().ToLower()) {
+            $('#next-page').click(function () {
+                url = '?size=' + $('#select-size').val() + '&number=' + @(Model.Pages.Number + 1) + "&withDeleted=" + $('#isDeleted').is(':checked');
+                window.location.replace(url);
+            });
+        } else {
+            $('#next-page').addClass('disabled');
+        }
+
+        $('.btn-page').click(function () {
+            url = '?size=' + $('#select-size').val() + '&number=' + $(this).text() + "&withDeleted=" + $('#isDeleted').is(':checked');
+            window.location.replace(url);
+        });
+
+        $('.delete-restore-btn').click(function () {
+            var isDeleted = $(this).data('status');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "This record will be " + (isDeleted ? "restored" : "deleted") + "!",
+                type: 'warning',
+                showCancelButton: true
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        url: '@Url.Action("DeleteOrRestore", "Messages", new { area = "Admin" })',
+                        method: 'POST',
+                        data: { id: $(this).parent().data('id') },
+                        success: function (data) {
+                            if (data.result) {
+                                Swal.fire(
+                                    'Deleted!',
+                                    'Record has been ' + (isDeleted ? "restored" : "deleted") + '.',
+                                    'success'
+                                ).then(function () {
+                                    window.location.reload();
+                                });
+                            } else {
+                                Swal.fire(
+                                    'Error!',
+                                    "Record wasn't found.",
+                                    'error'
+                                );
+                            }
+                        },
+                        error: function () {
+                            Swal.fire(
+                                'Error!',
+                                'Server error was occured. Please, contact support team!',
+                                'error'
+                            );
+                        }
+                    });
+                }
+            });
+        });
+    });
+    </script>
+}

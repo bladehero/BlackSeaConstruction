@@ -22,12 +22,16 @@ namespace BlackSeaConstruction.DataAccessLayer.Dao
         public IEnumerator GetEnumerator() => FindAll().GetEnumerator();
         IEnumerator<T> IEnumerable<T>.GetEnumerator() => FindAll().GetEnumerator();
 
-        public int Count() => Connection.QueryFirstOrDefault<int>($"select count(Id) from {TableName}");
+        public int Count(bool withDeleted = false) => Connection.QueryFirstOrDefault<int>($"select count(Id) from {TableName}{(withDeleted ? string.Empty : " where IsDeleted = 0")}");
 
         public T FindById(int id) => Connection.QueryFirstOrDefault<T>($"select top 1 * from {TableName} where Id = {id}");
         public virtual IEnumerable<T> FindAll(bool withDeleted = false) => Connection.Query<T>($"{SelectFromString}{(withDeleted ? string.Empty : " where IsDeleted = 0")}");
         public virtual IEnumerable<T> Find(Func<T, bool> predicate, bool withDeleted = false) => Connection.Query<T>($"{SelectFromString}{(withDeleted ? string.Empty : " where IsDeleted = 0")}").Where(predicate);
         public virtual T FirstOrDefault(Func<T, bool> predicate, bool withDeleted = false) => Connection.QueryFirstOrDefault<T>($"select top 1 * from {TableName}{(withDeleted ? string.Empty : " where IsDeleted = 0")}");
+        public virtual IEnumerable<T> Take(int count, int skip = 0, bool withDeleted = false)
+        {
+            return Connection.Query<T>($"{SelectFromString}{(withDeleted ? string.Empty : " where IsDeleted = 0")} order by DateModified desc offset ({skip}) rows fetch next ({count}) rows only");
+        }
 
         public virtual IEnumerable<T> Random(int count, bool withDeleted = false)
         {
@@ -79,6 +83,8 @@ namespace BlackSeaConstruction.DataAccessLayer.Dao
         }
         public virtual bool Delete(int id) => Connection.Execute($"update {TableName} set IsDeleted = 1 where Id = {id}") > 0;
         public virtual bool Delete(T item) => Delete(item.Id);
+        public virtual bool Restore(int id) => Connection.Execute($"update {TableName} set IsDeleted = 0 where Id = {id}") > 0;
+        public virtual bool Restore(T item) => Restore(item.Id);
         public virtual bool Merge(T item) => item?.Id == 0 ? Insert(item) > 0 : Update(item);
 
         protected IEnumerable<T> Query(string sql) => Connection.Query<T>(sql);

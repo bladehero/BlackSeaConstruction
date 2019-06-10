@@ -12,7 +12,7 @@ namespace BlackSeaConstruction.Web.Controllers
 
         public BaseController()
         {
-            sqlConnection = new SqlConnection(Startup.ConnectionString);
+            sqlConnection = new SqlConnection(GlobalVariables.ConnectionString);
             UnitOfWork = new UnitOfWork(sqlConnection);
         }
 

@@ -60,7 +60,7 @@ namespace BlackSeaConstruction.Web.Controllers
             {
                 try
                 {
-                    messageVM.Status = Status.P.ToString();
+                    messageVM.Status = Status.P;
                     UnitOfWork.Message.MergeMessage(messageVM);
                 }
                 catch (Exception)

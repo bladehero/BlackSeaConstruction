@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿using BlackSeaConstruction.BusinessLogicLayer.ViewModels.Messages;
+using System;
+using System.IO;
+using System.Linq;
 
 namespace BlackSeaConstruction.Web.Extensions
 {

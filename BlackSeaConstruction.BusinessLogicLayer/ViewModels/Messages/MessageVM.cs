@@ -17,7 +17,8 @@ namespace BlackSeaConstruction.BusinessLogicLayer.ViewModels.Messages
         public string Subject { get; set; }
         [Required]
         public string Text { get; set; }
-        public string Status { get; set; }
+        public Status Status { get; set; }
         public DateTime ReceivedAt { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

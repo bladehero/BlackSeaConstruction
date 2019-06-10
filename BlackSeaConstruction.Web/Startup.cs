@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,12 +9,12 @@ namespace BlackSeaConstruction.Web
 {
     public class Startup
     {
-        public static string ConnectionString { get; private set; }
-
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            ConnectionString = Configuration.GetConnectionString("DefaultConnection");
+            GlobalVariables.ConnectionString = Configuration.GetConnectionString("DefaultConnection");
+            GlobalVariables.Authentication.Login = Configuration.GetValue<string>("Login");
+            GlobalVariables.Authentication.Password = Configuration.GetValue<string>("Password");
         }
 
         public IConfiguration Configuration { get; }
@@ -54,8 +50,12 @@ namespace BlackSeaConstruction.Web
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                  name: "area",
+                  template: "{area:exists}/{controller=Home}/{action=Index}");
+
+                routes.MapRoute(
+                   name: "default",
+                   template: "{controller=Home}/{action=Index}");
             });
         }
     }
