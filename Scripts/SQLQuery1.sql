@@ -76,6 +76,8 @@ if not exists (select 1
     Id int not null primary key identity,
     ProjectName varchar(64) not null,
     [Description] varchar(max) null,
+    Longtitude float null,
+    Latitude float null,
     DateCreated datetime not null default(getdate()),
     DateModified datetime not null default(getdate()),
     IsDeleted bit not null default(0)
@@ -179,24 +181,28 @@ using
 (
   select p.ProjectName
        , p.[Description]
+       , p.Latitude
+       , p.Longtitude
   from 
   (
-    values ('Capilano Road Residence', 'Before, process and after')
-         , ('White Rock, BC', null)
-         , ('Fire Restoration Surrey,BC', null)
-         , ('Port Coquitlam, BC', null)
-         , ('Burnaby, BC', 'Townhouses frame + exterior finish')
-         , ('Granville Ave Residence', null)
-         , ('W20th Residence', null)
-         , ('Surrey (Commercial)', null)
-         , ('Highland Blvd Residence', null)
-         , ('Cambridge Drive Residence', null)
-  ) p(ProjectName, [Description])
+    values ('Capilano Road Residence', 'Before, process and after', null, null)
+         , ('White Rock, BC', null, 49.248094, -123.154496)
+         , ('Fire Restoration Surrey,BC', null, 49.274410, -123.220215)
+         , ('Port Coquitlam, BC', null, 49.290809, -123.128802)
+         , ('Burnaby, BC', 'Townhouses frame + exterior finish', null, null)
+         , ('Granville Ave Residence', null, null, null)
+         , ('W20th Residence', null, null, null)
+         , ('Surrey (Commercial)', null, null, null)
+         , ('Highland Blvd Residence', null, null, null)
+         , ('Cambridge Drive Residence', null, null, null)
+  ) p(ProjectName, [Description], Latitude, Longtitude)
 ) as src
 on (trg.ProjectName = src.ProjectName)
 when not matched by target then  
-  insert (ProjectName, [Description])
-  values (src.ProjectName, src.[Description])
+  insert (ProjectName, [Description], Latitude, Longtitude)
+  values (src.ProjectName, src.[Description], src.Latitude, src.Longtitude)
+when matched then
+  update set [Description] = src.[Description], Latitude = src.Latitude, Longtitude = src.Longtitude
   ;
 go
 

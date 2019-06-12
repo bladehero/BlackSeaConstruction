@@ -30,7 +30,7 @@ namespace BlackSeaConstruction.DataAccessLayer.Dao
         public virtual T FirstOrDefault(Func<T, bool> predicate, bool withDeleted = false) => Connection.QueryFirstOrDefault<T>($"select top 1 * from {TableName}{(withDeleted ? string.Empty : " where IsDeleted = 0")}");
         public virtual IEnumerable<T> Take(int count, int skip = 0, bool withDeleted = false)
         {
-            return Connection.Query<T>($"{SelectFromString}{(withDeleted ? string.Empty : " where IsDeleted = 0")} order by DateModified desc offset ({skip}) rows fetch next ({count}) rows only");
+            return Connection.Query<T>($"{SelectFromString}{(withDeleted ? string.Empty : " where IsDeleted = 0")} order by Id desc offset ({skip}) rows fetch next ({count}) rows only");
         }
 
         public virtual IEnumerable<T> Random(int count, bool withDeleted = false)

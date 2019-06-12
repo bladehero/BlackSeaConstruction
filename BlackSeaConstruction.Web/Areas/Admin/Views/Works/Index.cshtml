@@ -1,1 +1,263 @@
-﻿
+﻿@model BlackSeaConstruction.Web.Areas.Admin.Models.WorksVM
+@using static BlackSeaConstruction.Web.Extensions.EnumExtensions
+
+<div class="row animated fadeIn mt-2">
+    <div class="col-2 ml-2">
+        <select class="form-control form-control-sm" id="select-size">
+            @foreach (var size in BlackSeaConstruction.BusinessLogicLayer.ViewModels.PageVM.Sizes)
+            {
+                <option @(size == Model.Pages.Size ? "selected" : "")>@size</option>
+            }
+        </select>
+    </div>
+    <div class="col-2 text-white">
+        <div>
+            <input type="checkbox" id="isDeleted" name="isDeleted" @(Model.WithDeleted ? " checked" : "")>
+            <label for="isDeleted">With Deleted</label>
+        </div>
+    </div>
+    <div class="col-1 ml-auto mr-3">
+        <button type="button" class="btn btn-outline-light" id="search">Search</button>
+    </div>
+</div>
+<div class="row animated fadeInUp mt-2">
+    <div class="col-12">
+        <table class="table table-hover bg-light shadow rounded-bottom table-sm">
+            <thead>
+                <tr class="thead-dark text-center">
+                    <th scope="col">Id</th>
+                    <th scope="col">Project Name</th>
+                    <th scope="col">Latitude</th>
+                    <th scope="col">Longtitude</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var project in Model.Projects)
+                {
+                <tr class="text-center message-row" data-id="@project.Id">
+                    <th class="pointer" scope="row">@project.Id</th>
+                    <td class="pointer">@project.ProjectName</td>
+                    <td class="pointer">@(!project.Latitude.HasValue ? "—" : project.Latitude.ToString())</td>
+                    <td class="pointer">@(!project.Longtitude.HasValue ? "—" : project.Longtitude.ToString())</td>
+                    <td class="pointer delete-restore-btn" data-status="@project.IsDeleted.ToString().ToLower()">@(project.IsDeleted ? "✔" : "❌")</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-auto ml-auto mr-2">
+        <div class="btn-group shadow" role="group">
+            <button type="button" class="btn btn-outline-light btn-sm" id="previous-page"><</button>
+            @{
+                foreach (var number in Model.Pages.Pages)
+                {
+                    if (number == Model.Pages.Number)
+                    {
+                        <button type="button" class="btn btn-outline-light btn-sm btn-page active"><b>@number</b></button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-outline-light btn-sm btn-page"><b>@number</b></button>
+                    }
+                }
+            }
+            <button type="button" class="btn btn-outline-light btn-sm" id="next-page">></button>
+        </div>
+    </div>
+</div>
+
+@section Modals {
+    <div class="modal fade" id="modalCenter" tabindex="-1" role="dialog" aria-labelledby="modalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalCenterTitle">Message info</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="id-modal" />
+                    <div class="row justify-content-center">
+                        <div class="col-12 col-lg border border-dark mx-3 p-2 rounded shadow-sm">
+                            <p class="h1 text-center">Sender info:</p>
+                            <hr />
+                            <p class="h6">First Name: <span class="text-info" id="first-name-modal"></span></p>
+                            <p class="h6">Last Name: <span class="text-info" id="last-name-modal"></span></p>
+                            <p class="h6">Received At: <span class="text-info" id="received-at-modal"></span></p>
+                        </div>
+                        <div class="col-12 col-lg border border-dark mx-3 p-2 rounded shadow-sm">
+                            <p class="h1 text-center">Contact info:</p>
+                            <hr />
+                            <p class="h6">Email: <a class="text-warning" id="email-modal" href="#"></a></p>
+                            <p class="h6">Phone: <span class="text-warning" id="phone-modal"></span></p>
+                        </div>
+                        <div class="col-12 col-lg-12 mt-3">
+                            <div class="form-group">
+                                <select class="custom-select" id="status-modal">
+                                    @foreach (var pair in GetStatusPairs())
+                                    {
+                                        <option value="@pair.Key">@pair.Value</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="subject-modal">Subject</label>
+                                <input type="text" class="form-control" id="subject-modal" readonly />
+                            </div>
+                            <div class="form-group">
+                                <label for="text-modal">Text</label>
+                                <textarea class="form-control" id="text-modal" readonly></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="save-message-changes">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            function search() {
+                var size = $('#select-size :selected').text();
+                window.location.replace("@Url.Action("Index", "Works", new { area = "Admin" })?size=" + size + "&withDeleted=" + $('#isDeleted').is(':checked') + '&number=' + $('.btn-page.active').text());
+            }
+
+            $('.message-row').click(function () {
+                $.ajax({
+                    url: '@Url.Action("GetMessageById", "Messages", new { area = "Admin" })',
+                    method: 'GET',
+                    data: { id: $(this).data('id') },
+                    success: function (data) {
+                        var _blank = '—';
+                        $('#id-modal').val(data.id);
+                        $('#first-name-modal').text(data.firstName ? data.firstName : _blank);
+                        $('#last-name-modal').text(data.lastName ? data.lastName : _blank);
+                        $('#received-at-modal').text(new Date(data.receivedAt).toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' }));
+                        $('#email-modal').attr('href', 'mailto:' + data.email).text(data.email);
+                        $('#phone-modal').text(data.phone ? data.phone : _blank);
+                        $('#status-modal').val(data.status);
+                        $('#subject-modal').val(data.subject);
+                        $('#text-modal').val(data.text);
+                        $('#modalCenter').modal('show');
+                    },
+                    error: function () {
+                        Swal.fire(
+                            'Error!',
+                            'Server error was occured. Please, contact support team!',
+                            'error'
+                        );
+                    }
+                });
+            });
+
+            $('#save-message-changes').click(function () {
+                var id = $('#id-modal').val();
+                var status = $('#status-modal :selected').val();
+                $.ajax({
+                    url: '@Url.Action("UpdateMessageStatus", "Messages", new { area = "Admin" })',
+                    method: 'POST',
+                    data: { id: id, status: status },
+                    success: function (data) {
+                        if (data.result) {
+                            Swal.fire(
+                                'Success!',
+                                'Status was updated.',
+                                'success'
+                            ).then(function () {
+                                search();
+                            });
+                        } else {
+                            Swal.fire(
+                                'Error!',
+                                "Something go wrong or message wasn't found.",
+                                'error'
+                            );
+                        }
+                    },
+                    error: function () {
+                        Swal.fire(
+                            'Error!',
+                            'Server error was occured. Please, contact support team!',
+                            'error'
+                        );
+                    }
+                });
+            });
+
+            $('#search').click(search);
+
+            if (@Model.Pages.HasPreviousPage.ToString().ToLower()) {
+            $('#previous-page').click(function () {
+                url = '?size=' + $('#select-size').val() + '&number=' + @(Model.Pages.Number - 1) + "&withDeleted=" + $('#isDeleted').is(':checked');
+                window.location.replace(url);
+            });
+            } else {
+                $('#previous-page').addClass('disabled');
+            }
+
+            if (@Model.Pages.HasNextPage.ToString().ToLower()) {
+                $('#next-page').click(function () {
+                    url = '?size=' + $('#select-size').val() + '&number=' + @(Model.Pages.Number + 1) + "&withDeleted=" + $('#isDeleted').is(':checked');
+                    window.location.replace(url);
+                });
+            } else {
+                $('#next-page').addClass('disabled');
+            }
+
+            $('.btn-page').click(function () {
+                url = '?size=' + $('#select-size').val() + '&number=' + $(this).text() + "&withDeleted=" + $('#isDeleted').is(':checked');
+                window.location.replace(url);
+            });
+
+            $('.delete-restore-btn').click(function () {
+                var isDeleted = $(this).data('status');
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "This record will be " + (isDeleted ? "restored" : "deleted") + "!",
+                    type: 'warning',
+                    showCancelButton: true
+                }).then((result) => {
+                    if (result.value) {
+                        $.ajax({
+                            url: '@Url.Action("DeleteOrRestore", "Works", new { area = "Admin" })',
+                            method: 'POST',
+                            data: { id: $(this).parent().data('id') },
+                            success: function (data) {
+                                if (data.result) {
+                                    Swal.fire(
+                                        'Deleted!',
+                                        'Record has been ' + (isDeleted ? "restored" : "deleted") + '.',
+                                        'success'
+                                    ).then(function () {
+                                        search();
+                                    });
+                                } else {
+                                    Swal.fire(
+                                        'Error!',
+                                        "Record wasn't found.",
+                                        'error'
+                                    );
+                                }
+                            },
+                            error: function () {
+                                Swal.fire(
+                                    'Error!',
+                                    'Server error was occured. Please, contact support team!',
+                                    'error'
+                                );
+                            }
+                        });
+                    }
+                });
+        });
+    });
+    </script>
+}

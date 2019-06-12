@@ -33,6 +33,15 @@ namespace BlackSeaConstruction.BusinessLogicLayer.BusinessLogicLayers
             }).CreateMapper();
         }
 
+        public int ProjectsCount(bool withDeleted = true) => _projects.Count(withDeleted);
+
+        public IEnumerable<ProjectVM> GetProjects(int count = 10, int skip = 0, bool withDeleted = true)
+        {
+            var projects = _projects.Take(count, skip, withDeleted);
+            var projectVMs = Map<IEnumerable<Project>, IEnumerable<ProjectVM>>(projects);
+            return projectVMs;
+        }
+
         public ProjectVM GetProjectById(int? id)
         {
             var project = id.HasValue ? _projects.FindById(id.Value) : _projects.FirstOrDefault();
@@ -61,9 +70,16 @@ namespace BlackSeaConstruction.BusinessLogicLayer.BusinessLogicLayers
             var projectVMs = projects.Select(x => new ProjectListItemVM
             {
                 Id = x.Id,
-                ProjectName = x.ProjectName
+                ProjectName = x.ProjectName,
+                Latitude = x.Latitude,
+                Longtitude = x.Longtitude
             });
             return projectVMs;
         }
+
+        public bool Delete(int id) => _projects.Delete(id);
+        public bool RestoreMessage(int id) => _projects.Restore(id);
+        public bool DeleteOrRestoreMessage(int id) => _projects.FindById(id).IsDeleted ? _projects.Restore(id) : _projects.Delete(id);
+
     }
 }

@@ -36,6 +36,13 @@ namespace BlackSeaConstruction.BusinessLogicLayer.BusinessLogicLayers
 
         public int MessagesCount(bool withDeleted = true) => _messages.Count(withDeleted);
 
+        public MessageVM GetMessageById(int id)
+        {
+            var message = _messages.FindById(id);
+            var messageVM = Map<Message, MessageVM>(message);
+            return messageVM;
+        }
+
         public IEnumerable<MessageVM> GetMessages(int count = 10, int skip = 0, bool withDeleted = true)
         {
             var messages = _messages.Take(count, skip, withDeleted);
@@ -52,7 +59,6 @@ namespace BlackSeaConstruction.BusinessLogicLayer.BusinessLogicLayers
         public bool Delete(int id) => _messages.Delete(id);
         public bool RestoreMessage(int id) => _messages.Restore(id);
         public bool DeleteOrRestoreMessage(int id) => _messages.FindById(id).IsDeleted ? _messages.Restore(id) : _messages.Delete(id);
-
 
         private Status GetStatus(string status)
         {

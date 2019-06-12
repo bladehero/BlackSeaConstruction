@@ -1,4 +1,5 @@
 ﻿using BlackSeaConstruction.BusinessLogicLayer.ViewModels;
+using BlackSeaConstruction.BusinessLogicLayer.ViewModels.Messages;
 using BlackSeaConstruction.Web.Areas.Admin.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,6 +19,28 @@ namespace BlackSeaConstruction.Web.Areas.Admin.Controllers
                 WithDeleted = withDeleted
             };
             return View(model);
+        }
+
+        public IActionResult GetMessageById(int id)
+        {
+            return Json(UnitOfWork.Message.GetMessageById(id));
+        }
+
+        [HttpPost]
+        public IActionResult UpdateMessageStatus(int id, int status)
+        {
+            var result = true;
+            try
+            {
+                var message = UnitOfWork.Message.GetMessageById(id);
+                message.Status = (Status)status;
+                result = UnitOfWork.Message.MergeMessage(message);
+            }
+            catch (System.Exception)
+            {
+                result = false;
+            }
+            return Json(new { result });
         }
 
         [HttpPost]

@@ -4,10 +4,10 @@ namespace BlackSeaConstruction.BusinessLogicLayer.ViewModels.Messages
 {
     public enum Status
     {
-        [Description("Completed")]
-        C,
         [Description("Pending")]
         P,
+        [Description("Completed")]
+        C,
         [Description("Rejected")]
         R
     }
