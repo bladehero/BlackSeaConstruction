@@ -6,6 +6,13 @@
 }
 
 <link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.0/mapsjs-ui.css?dp-version=1549984893" />
+<style>
+    .H_ib_content {
+        min-width: 8em;
+        margin: .5em;
+        padding: 0;
+    }
+</style>
 <script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-core.js"></script>
 <script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-service.js"></script>
 <script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-ui.js"></script>
@@ -40,7 +47,9 @@
 <div class="row mt-3">
     <div class="col-12">
         <h1 class="text-center">Interactive Map</h1>
-        <div id="map" class="w-100 mt-2" style="height: 600px; background: grey;" />
+        <div class="p-1 bg-dark rounded border border-warning mt-3 shadow-lg">
+            <div id="map" class="w-100" style="height: 600px; background: grey;" />
+        </div>
         <script type="text/javascript" charset="UTF-8">
             /**
              * Creates a new marker and adds it to a group
@@ -82,7 +91,7 @@
                     if (project.Latitude.HasValue && project.Longtitude.HasValue)
                     {
                         @:addMarkerToGroup(group, { lat: @project.Latitude, lng: @project.Longtitude },
-                        @:'<div><a class="text-warning text-center" href="@Url.Action("Works", "Home", new { id = project.Id })" >@project.ProjectName</a></div>');
+                        @:'<div><a class="text-warning text-center" href="@Url.Action("Works", "Home", new { id = project.Id })" >@project.ProjectName</a></div><div>@project.Latitude, @project.Longtitude</div>');
                     }
                 }
             }
