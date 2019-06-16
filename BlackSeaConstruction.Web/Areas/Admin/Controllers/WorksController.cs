@@ -2,7 +2,9 @@
 using BlackSeaConstruction.BusinessLogicLayer.ViewModels.Projects;
 using BlackSeaConstruction.Web.Areas.Admin.Models;
 using BlackSeaConstruction.Web.Extensions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace BlackSeaConstruction.Web.Areas.Admin.Controllers
@@ -21,6 +23,78 @@ namespace BlackSeaConstruction.Web.Areas.Admin.Controllers
                 WithDeleted = withDeleted
             };
             return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult MergeWork(WorkAddOrUpdateVM model)
+        {
+            var result = true;
+            var message = string.Empty;
+
+            try
+            {
+                var project = new ProjectVM
+                {
+                    Id = model.Id.GetValueOrDefault(),
+                    ProjectName = model.Name,
+                    Description = model.Description,
+                    Latitude = (decimal)model.Latitude,
+                    Longtitude = (decimal)model.Longtitude
+                };
+
+                var projectCreated = UnitOfWork.Projects.MergeProject(project);
+                if (projectCreated)
+                {
+                    foreach (var section in model.Sections)
+                    {
+                        var _section = new ProjectSectionVM
+                        {
+                            Id = section.Id.GetValueOrDefault(),
+                            Description = section.Description,
+                            SectionName = section.Name,
+                            ProjectId = project.Id
+                        };
+                        UnitOfWork.Projects.MergeProjectSection(_section);
+                        foreach (var image in section.Images)
+                        {
+                            if (image.Updated)
+                            {
+                                UnitOfWork.Projects.MergeProjectSectionImage(new ProjectSectionImageVM
+                                {
+                                    Id = image.Id.GetValueOrDefault(),
+                                    Image = image.FileName,
+                                    SectionId = _section.Id
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+            catch (System.Exception ex)
+            {
+                result = false;
+                message = UnknownError;
+            }
+
+            return Json(new { result, message });
+        }
+
+        public IActionResult UploadWorkImages(IEnumerable<IFormFile> files)
+        {
+            var result = true;
+            var message = string.Empty;
+
+            try
+            {
+
+            }
+            catch (System.Exception ex)
+            {
+                result = false;
+                message = UnknownError;
+            }
+
+            return Json(new { result, message });
         }
 
         public IActionResult GetWorkById(int id)

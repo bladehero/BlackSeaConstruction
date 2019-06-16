@@ -22,6 +22,8 @@ namespace BlackSeaConstruction.BusinessLogicLayer.BusinessLogicLayers
 
             Mapper = new MapperConfiguration(cfg =>
             {
+                cfg.CreateMap<ProjectSectionImageVM, ProjectSectionImage>();
+                cfg.CreateMap<ProjectSectionImage, ProjectSectionImageVM>();
                 cfg.CreateMap<ProjectSection, ProjectSectionVM>().AfterMap((m, vm) =>
                 {
                     vm.Images = _projectSectionImages.GetSectionImagesBySectionId(m.Id).Select(x => new ProjectSectionImageVM { Id = x.Id, Image = x.Image });
@@ -52,7 +54,7 @@ namespace BlackSeaConstruction.BusinessLogicLayer.BusinessLogicLayers
                 ProjectName = project.ProjectName,
                 SectionName = x.SectionName,
                 Description = x.Description,
-                Images = _projectSectionImages.GetSectionImagesBySectionId(x.Id).Select(i => new ProjectSectionImageVM { Id = i.Id, Image = i.Image } )
+                Images = _projectSectionImages.GetSectionImagesBySectionId(x.Id).Select(i => new ProjectSectionImageVM { Id = i.Id, Image = i.Image })
             }).ToList();
             return projectVM;
         }
@@ -82,5 +84,29 @@ namespace BlackSeaConstruction.BusinessLogicLayer.BusinessLogicLayers
         public bool DeleteOrRestoreProject(int id) => _projects.FindById(id).IsDeleted ? _projects.Restore(id) : _projects.Delete(id);
 
         public bool DeleteSectionImage(int id) => _projectSectionImages.Delete(id);
+
+        public bool MergeProject(ProjectVM projectVM)
+        {
+            var project = Map<ProjectVM, Project>(projectVM);
+            var result = _projects.Merge(project);
+            projectVM.Id = project.Id;
+            return result;
+        }
+
+        public bool MergeProjectSection(ProjectSectionVM sectionVM)
+        {
+            var section = Map<ProjectSectionVM, ProjectSection>(sectionVM);
+            var result = _projectSections.Merge(section);
+            sectionVM.Id = section.Id;
+            return result;
+        }
+
+        public bool MergeProjectSectionImage(ProjectSectionImageVM imageVM)
+        {
+            var image = Map<ProjectSectionImageVM, ProjectSectionImage>(imageVM);
+            var result = _projectSectionImages.Merge(image);
+            imageVM.Id = image.Id;
+            return result;
+        }
     }
 }

@@ -408,7 +408,7 @@
             }
 
             $('#save-works-changes').click(function () {
-                debugger;
+                var images = [];
                 var projectId = $('#id-modal').val();
                 var projectName = $('#project-name').val();
                 var projectDescription = $('#project-description').val();
@@ -423,7 +423,6 @@
                     sections: []
                 };
                 $('.project-section').each(function (i, section) {
-                    debugger;
                     var sectionId = $(section).data('id');
                     var sectionName = $(section).find('.section-name').val();
                     var sectionDescription = $(section).find('.section-description').val();
@@ -434,20 +433,77 @@
                         images: []
                     };
                     $(this).find('.section-image-list .section-image-row').each(function (i, row) {
-                        debugger;
                         var image = $(row).find('img');
                         var imageId = image.data('id');
                         var imageUpdated = image.data('updated');
-                        var imageFile = $(row).find('input')[0].files[0];
+                        var imageFile = '';
+                        if ($(row).find('input')[0].files[0]) {
+                            imageFile = $(row).find('input')[0].files[0].name;
+                            images.push($(row).find('input')[0].files[0]);
+                        }
                         if (!((!imageId) && (!imageUpdated) && (!imageFile))) {
                             projectSection.images.push({
                                 id: imageId,
                                 updated: imageUpdated,
-                                file: imageFile
+                                fileName: imageFile
                             });
                         }
                     });
                     project.sections.push(projectSection);
+                });
+                $.ajax({
+                    url: '@Url.Action("MergeWork", "Works", new { area = "Admin" })',
+                    method: 'POST',
+                    data: project,
+                    success: function (data) {
+                        debugger;
+                        if (data.result) {
+                            $.ajax({
+                                url: '@Url.Action("UploadWorkImages", "Works", new { area = "Admin" })',
+                                method: 'POST',
+                                processData: false,
+                                data: images,
+                                success: function (data) {
+                                    debugger;
+                                    if (data.result) {
+                                        Swal.fire(
+                                            'Updated!',
+                                            'Work has been updated successfully.',
+                                            'success'
+                                        ).then(function () {
+                                            search();
+                                        });
+                                    } else {
+                                        Swal.fire(
+                                            'Error!',
+                                            "Not all of images was uploaded successfully. Please, contact support team!",
+                                            'error'
+                                        );
+                                    }
+                                }, 
+                                error: function () {
+                                    Swal.fire(
+                                        'Error!',
+                                        'Server error was occured. Please, contact support team!',
+                                        'error'
+                                    );
+                                }
+                            });
+                        } else {
+                            Swal.fire(
+                                'Error!',
+                                "Something was wrong or record wasn't found.",
+                                'error'
+                            );
+                        }
+                    },
+                    error: function () {
+                        Swal.fire(
+                            'Error!',
+                            'Server error was occured. Please, contact support team!',
+                            'error'
+                        );
+                    }
                 });
             });
         });

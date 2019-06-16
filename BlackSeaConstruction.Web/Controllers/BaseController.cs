@@ -7,6 +7,8 @@ namespace BlackSeaConstruction.Web.Controllers
 {
     public class BaseController : Controller
     {
+        public const string UnknownError = "Server error was occured. Please, contact support team!";
+
         protected UnitOfWork UnitOfWork { get; }
         private SqlConnection sqlConnection;
 
