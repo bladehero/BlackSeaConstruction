@@ -8,6 +8,6 @@ namespace BlackSeaConstruction.BusinessLogicLayer.ViewModels.Projects
         public string SectionName { get; set; }
         public string Description { get; set; }
         public string ProjectName { get; set; }
-        public IEnumerable<string> Images { get; set; }
+        public IEnumerable<ProjectSectionImageVM> Images { get; set; }
     }
 }

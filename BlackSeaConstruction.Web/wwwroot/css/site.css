@@ -673,3 +673,9 @@ input.form-control {
         -webkit-transform: scale(1.05);
         transform: scale(1.05);
     }
+
+.tooltip-inner {
+    max-width: 350px;
+    width: 350px;
+    font-size: 16px;
+}

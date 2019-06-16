@@ -9,10 +9,9 @@ namespace BlackSeaConstruction.DataAccessLayer.Dao
     {
         public ProjectSectionImageDao(IDbConnection connection) : base("dbo.ProjectSectionImages", connection) { }
 
-        public IEnumerable<string> GetSectionImagesBySectionId(int sectionId)
+        public IEnumerable<ProjectSectionImage> GetSectionImagesBySectionId(int sectionId)
         {
-            var result = Connection.Query<string>($"select [Image] from {TableName} where SectionId = {sectionId}");
-            return result;
+            return Connection.Query<ProjectSectionImage>($"{SelectFromString} where SectionId = {sectionId} and isDeleted = 0");
         }
     }
 }

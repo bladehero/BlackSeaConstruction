@@ -65,6 +65,13 @@
         </div>
     </div>
 </div>
+<hr class="mt-5 border-white"/>
+<div class="row justify-content-center" id="blockquote" data-toggle="tooltip" data-placement="bottom" title="Colossians 3 is the third chapter of the Epistle to the Colossians in the New Testament of the Christian Bible.">
+    <blockquote class="blockquote">
+        <p class="text-center text-warning">Whatever you do, work at it with all your heart, as working for the Lord, not for men.</p>
+        <footer class="blockquote-footer text-white text-center">Colossians 3:23</footer>
+    </blockquote>
+</div>
 
 
 @section Intro {
@@ -99,6 +106,7 @@
     <script src="~/js/intro.js"></script>
     <script>
         $(document).ready(function () {
+            $('#blockquote').tooltip({ animation: true, placement: "auto" });
             $('#link-about-us').addClass('active');
 
             if ($(window).width() > 800) {

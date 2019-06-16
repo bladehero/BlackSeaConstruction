@@ -92,6 +92,7 @@ if not exists (select 1
   (
     Id int not null primary key identity,
     SectionName varchar(128) null,
+    [Description] varchar(max) null,
     ProjectId int not null foreign key references [dbo].[Projects](Id),
     DateCreated datetime not null default(getdate()),
     DateModified datetime not null default(getdate()),

@@ -1,5 +1,4 @@
 ﻿@model BlackSeaConstruction.Web.Areas.Admin.Models.WorksVM
-@using static BlackSeaConstruction.Web.Extensions.EnumExtensions
 
 <div class="row animated fadeIn mt-2">
     <div class="col-2 ml-2">
@@ -10,15 +9,14 @@
             }
         </select>
     </div>
-    <div class="col-2 text-white">
+    <div class="col-4 text-white">
         <div>
             <input type="checkbox" id="isDeleted" name="isDeleted" @(Model.WithDeleted ? " checked" : "")>
             <label for="isDeleted">With Deleted</label>
         </div>
     </div>
-    <div class="col-1 ml-auto mr-3">
-        <button type="button" class="btn btn-outline-light" id="search">Search</button>
-    </div>
+    <button type="button" class="btn btn-warning ml-auto mr-3" id="add-project">Add Project</button>
+    <button type="button" class="btn btn-outline-light mr-3" id="search">Search</button>
 </div>
 <div class="row animated fadeInUp mt-2">
     <div class="col-12">
@@ -35,13 +33,13 @@
             <tbody>
                 @foreach (var project in Model.Projects)
                 {
-                <tr class="text-center message-row" data-id="@project.Id">
-                    <th class="pointer" scope="row">@project.Id</th>
-                    <td class="pointer">@project.ProjectName</td>
-                    <td class="pointer">@(!project.Latitude.HasValue ? "—" : project.Latitude.ToString())</td>
-                    <td class="pointer">@(!project.Longtitude.HasValue ? "—" : project.Longtitude.ToString())</td>
-                    <td class="pointer delete-restore-btn" data-status="@project.IsDeleted.ToString().ToLower()">@(project.IsDeleted ? "✔" : "❌")</td>
-                </tr>
+                    <tr class="text-center work-row pointer" data-id="@project.Id">
+                        <th class="pointer" scope="row">@project.Id</th>
+                        <td class="pointer">@project.ProjectName</td>
+                        <td class="pointer">@(!project.Latitude.HasValue ? "—" : project.Latitude.ToString())</td>
+                        <td class="pointer">@(!project.Longtitude.HasValue ? "—" : project.Longtitude.ToString())</td>
+                        <td class="pointer delete-restore-btn" data-status="@project.IsDeleted.ToString().ToLower()">@(project.IsDeleted ? "✔" : "❌")</td>
+                    </tr>
                 }
             </tbody>
         </table>
@@ -68,54 +66,55 @@
 </div>
 
 @section Modals {
-    <div class="modal fade" id="modalCenter" tabindex="-1" role="dialog" aria-labelledby="modalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-            <div class="modal-content">
+    <div class="modal fade text-white" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-xl bg-dark" role="document">
+            <div class="modal-content bg-dark">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalCenterTitle">Message info</h5>
+                    <h3 class="modal-title" id="modalTitle">Add/Update Work</h3>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+                        <span aria-hidden="true" class="text-white">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <input type="hidden" id="id-modal" />
-                    <div class="row justify-content-center">
-                        <div class="col-12 col-lg border border-dark mx-3 p-2 rounded shadow-sm">
-                            <p class="h1 text-center">Sender info:</p>
-                            <hr />
-                            <p class="h6">First Name: <span class="text-info" id="first-name-modal"></span></p>
-                            <p class="h6">Last Name: <span class="text-info" id="last-name-modal"></span></p>
-                            <p class="h6">Received At: <span class="text-info" id="received-at-modal"></span></p>
+                    <h5 class="text-center">Work Details</h5>
+                    <div class="row rounded mb-2 mx-2 py-2" id="project-properties">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="project-name">Name</label>
+                                <input type="text" class="form-control" id="project-name" aria-describedby="nameHelp" placeholder="Enter project name..." />
+                                <small id="nameHelp" class="form-text text-warning">This field is required.</small>
+                            </div>
                         </div>
-                        <div class="col-12 col-lg border border-dark mx-3 p-2 rounded shadow-sm">
-                            <p class="h1 text-center">Contact info:</p>
-                            <hr />
-                            <p class="h6">Email: <a class="text-warning" id="email-modal" href="#"></a></p>
-                            <p class="h6">Phone: <span class="text-warning" id="phone-modal"></span></p>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="project-description">Description</label>
+                                <textarea class="form-control" id="project-description" placeholder="Enter project description..." maxlength="1000"></textarea>
+                            </div>
                         </div>
-                        <div class="col-12 col-lg-12 mt-3">
-                            <div class="form-group">
-                                <select class="custom-select" id="status-modal">
-                                    @foreach (var pair in GetStatusPairs())
-                                    {
-                                        <option value="@pair.Key">@pair.Value</option>
-                                    }
-                                </select>
+                        <div class="col-12">
+                            <div class="form-row">
+                                <div class="col">
+                                    <label for="project-latitude">Latitude</label>
+                                    <input id="project-latitude" type="number" class="form-control" placeholder="Enter latitude..." max="85" min="-85" value="49.2827" step="0.000001">
+                                </div>
+                                <div class="col">
+                                    <label for="project-longtitude">Longtitude</label>
+                                    <input id="project-longtitude" type="number" class="form-control" placeholder="Enter longtitude..." max="180" min="-180" value="-123.1207" step="0.000001">
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="subject-modal">Subject</label>
-                                <input type="text" class="form-control" id="subject-modal" readonly />
+                        </div>
+                        <div class="col-12 mt-4 pt-3">
+                            <h6 class="text-center">Sections</h6>
+                            <div id="project-sections">
                             </div>
-                            <div class="form-group">
-                                <label for="text-modal">Text</label>
-                                <textarea class="form-control" id="text-modal" readonly></textarea>
-                            </div>
+                            <button type="button" class="btn btn-success ml-2 mt-2" id="add-section">Add Section</button>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="save-message-changes">Save</button>
+                    <button type="button" class="btn btn-warning" id="save-works-changes">Save</button>
                 </div>
             </div>
         </div>
@@ -126,27 +125,26 @@
     <script>
         $(document).ready(function () {
             function search() {
-                var size = $('#select-size :selected').text();
+               var size = $('#select-size :selected').text();
                 window.location.replace("@Url.Action("Index", "Works", new { area = "Admin" })?size=" + size + "&withDeleted=" + $('#isDeleted').is(':checked') + '&number=' + $('.btn-page.active').text());
             }
 
-            $('.message-row').click(function () {
+            $('.work-row').click(function () {
+                clearModal();
                 $.ajax({
-                    url: '@Url.Action("GetMessageById", "Messages", new { area = "Admin" })',
+                    url: '@Url.Action("GetWorkById", "Works", new { area = "Admin" })',
                     method: 'GET',
                     data: { id: $(this).data('id') },
                     success: function (data) {
-                        var _blank = '—';
-                        $('#id-modal').val(data.id);
-                        $('#first-name-modal').text(data.firstName ? data.firstName : _blank);
-                        $('#last-name-modal').text(data.lastName ? data.lastName : _blank);
-                        $('#received-at-modal').text(new Date(data.receivedAt).toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' }));
-                        $('#email-modal').attr('href', 'mailto:' + data.email).text(data.email);
-                        $('#phone-modal').text(data.phone ? data.phone : _blank);
-                        $('#status-modal').val(data.status);
-                        $('#subject-modal').val(data.subject);
-                        $('#text-modal').val(data.text);
-                        $('#modalCenter').modal('show');
+                        $('#id-modal').val(data.work.id);
+                        $('#project-name').val(data.work.projectName);
+                        $('#project-description').val(data.work.description);
+                        $('#project-latitude').val(data.work.latitude);
+                        $('#project-longtitude').val(data.work.longtitude);
+                        $(data.work.projectSections).each(function (i, section) {
+                            addSection(section);
+                        });
+                        $('#modal').modal('show');
                     },
                     error: function () {
                         Swal.fire(
@@ -158,26 +156,26 @@
                 });
             });
 
-            $('#save-message-changes').click(function () {
+            $('#save-work-changes').click(function () {
                 var id = $('#id-modal').val();
                 var status = $('#status-modal :selected').val();
                 $.ajax({
-                    url: '@Url.Action("UpdateMessageStatus", "Messages", new { area = "Admin" })',
+                    url: '@Url.Action("CreateOrUpdateWork", "Works", new { area = "Admin" })',
                     method: 'POST',
                     data: { id: id, status: status },
                     success: function (data) {
                         if (data.result) {
                             Swal.fire(
                                 'Success!',
-                                'Status was updated.',
+                                'Work was ' + (id ? 'updated' : 'created') + '.',
                                 'success'
                             ).then(function () {
                                 search();
-                            });
+                        });
                         } else {
                             Swal.fire(
                                 'Error!',
-                                "Something go wrong or message wasn't found.",
+                                "Something go wrong or work wasn't found.",
                                 'error'
                             );
                         }
@@ -194,22 +192,26 @@
 
             $('#search').click(search);
 
-            if (@Model.Pages.HasPreviousPage.ToString().ToLower()) {
-            $('#previous-page').click(function () {
-                url = '?size=' + $('#select-size').val() + '&number=' + @(Model.Pages.Number - 1) + "&withDeleted=" + $('#isDeleted').is(':checked');
-                window.location.replace(url);
-            });
-            } else {
-                $('#previous-page').addClass('disabled');
+            @if (Model.Pages.HasPreviousPage) {
+                @:$('#previous-page').click(function () {
+                @:    url = '?size=' + $('#select-size').val() + '&number=' + @(Model.Pages.Number - 1) + "&withDeleted=" + $('#isDeleted').is(':checked');
+                @:    window.location.replace(url);
+                @:});
+            }
+            else
+            {
+                @:$('#previous-page').addClass('disabled');
             }
 
-            if (@Model.Pages.HasNextPage.ToString().ToLower()) {
-                $('#next-page').click(function () {
-                    url = '?size=' + $('#select-size').val() + '&number=' + @(Model.Pages.Number + 1) + "&withDeleted=" + $('#isDeleted').is(':checked');
-                    window.location.replace(url);
-                });
-            } else {
-                $('#next-page').addClass('disabled');
+            @if (Model.Pages.HasNextPage) {
+                @:$('#next-page').click(function () {
+                @:    url = '?size=' + $('#select-size').val() + '&number=' + @(Model.Pages.Number + 1) + "&withDeleted=" + $('#isDeleted').is(':checked');
+                @:    window.location.replace(url);
+                @:});
+            }
+            else
+            {
+                @:$('#next-page').addClass('disabled');
             }
 
             $('.btn-page').click(function () {
@@ -257,7 +259,197 @@
                         });
                     }
                 });
+            });
+            
+            function addSectionImage(root, model) {
+                var path = '';
+                if (model) {
+                    var image = '<img src=' + model.image + ' class="rounded mx-auto show-section-image img-thumbnail w-50 mb-2" data-id="' + model.id + '">';
+                    if (model.image) {
+                        path = model.image;
+                    }
+                } else {
+                    var image = '<img src="#" class="rounded mx-auto d-none show-section-image img-thumbnail w-50 mb-2">';
+                }
+                var parent = root.parent('.section-image');
+                parent.children('.section-image-list').append(
+                    '<div class="section-image-row animated fadeInLeft text-center">' +
+                        '<div class="input-group input-group-sm mb-2">' +
+                            '<div class="custom-file text-left">' +
+                                '<input type="file" class="custom-file-input inputGroupFile" id="inputGroupFile" aria-describedby="inputGroupFileAddon">' +
+                                '<label class="custom-file-label" for="inputGroupFile">' + (path ? path : 'Choose file...') + '</label>' +
+                            '</div>' +
+                            '<div class="input-group-append">' +
+                                '<button class="btn btn-danger delete-section-image" type="button" id="inputGroupFileAddon">Delete Image</button>' +
+                            '</div>' +
+                        '</div>' +
+                        image +
+                    '</div>');
+                parent.find('.delete-section-image').off('click').click(function () {
+                    var row = $(this).parents('div.section-image-row');
+                    if (!row.find('img').data('id')) {
+                        var image = row.addClass('fadeOutRight');
+                        setTimeout(function () {
+                            image.remove();
+                        }, 1000);
+                    } else {
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            text: "This image will be deleted!",
+                            type: 'warning',
+                            showCancelButton: true
+                        }).then((result) => {
+                            if (result.value) {
+                                $.ajax({
+                                    method: 'DELETE',
+                                    url: '@Url.Action("DeleteSectionImage", "Works", new { area = "Admin" })',
+                                    data: { id: $(this).parents('div.input-group').siblings('img').data('id') },
+                                    success: function (data) {
+                                        if (data.result) {
+                                            var image = row.addClass('fadeOutRight');
+                                            setTimeout(function () {
+                                                image.remove();
+                                            }, 1000);
+                                        } else {
+                                            Swal.fire(
+                                                'Error!',
+                                                "Record wasn't found.",
+                                                'error'
+                                            );
+                                        }
+                                    },
+                                    error: function () {
+                                        Swal.fire(
+                                            'Error!',
+                                            'Server error was occured. Please, contact support team!',
+                                            'error'
+                                        );
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+                $(".inputGroupFile").off("change").on("change", function () {
+                    var input = $(this)[0];
+                    $(this).next(".custom-file-label").html(input.files[0].name);
+                    if (input.files && input.files[0]) {
+                        var reader = new FileReader();
+                        reader.onload = function (e) {
+                            $(input).parents("div.input-group").siblings("img.show-section-image").attr("src", e.target.result).removeClass("d-none").addClass("d-block animated fadeInUp");
+                        };
+                        reader.readAsDataURL(input.files[0]);
+                    }
+                    $(this).parents('div.input-group').siblings('img').data('updated', true);
+                });
+            }
+
+            function addSection(section) {
+                var id = '';
+                if (section) {
+                    var id = ' data-id="' + section.id + '"';
+                }
+                var parent = $('#project-sections');
+                parent.append('<div class="row border border-warning rounded bg-secondary m-1 mb-2 py-2 project-section animated fadeIn"' + id + '>' +
+                                  '<div class="col-12">' +
+                                      '<button type="button" class="close delete-section ml-auto position-relative" style="margin-top: -5px;">' +
+                                          '<span aria-hidden="true" class="text-white">&times;</span>' +
+                                      '</button>' +
+                                      '<div class="form-group">' +
+                                          '<label for="section-name">Name</label>' +
+                                          '<input type="text" class="form-control section-name" aria-describedby="nameHelp" placeholder="Enter section name..." />' +
+                                      '</div>' +
+                                  '</div>' +
+                                  '<div class="col-12">' +
+                                      '<div class="form-group">' +
+                                          '<label for="section-description">Description</label>' +
+                                          '<textarea class="form-control section-description" placeholder="Enter section description..." maxlength="500"></textarea>' +
+                                      '</div>' +
+                                  '</div>' +
+                                  '<div class="section-image col-12">' +
+                                      '<div class="section-image-list">' +
+                                      '</div>' +
+                                      '<button type="button" class="btn btn-sm btn-info mb-2 add-section-image">Add Image</button>' +
+                                  '</div>' +
+                                '</div>');
+
+                if (section) {
+                    var projectSection = parent.find('.project-section:last-child');
+                    projectSection.find('input.section-name').val(section.sectionName);
+                    projectSection.find('input.section-description').val(section.description);
+                }
+
+                parent.find('div button.delete-section').off('click').click(function () {
+                    var section = $(this).parents('.project-section').addClass('fadeOut');
+                    setTimeout(function () { section.remove(); }, 1000);
+                });
+
+                var root = $('.add-section-image').off('click').click(function () { addSectionImage($(this)); });
+                if (section) {
+                    $(section.images).each(function (i, image) {
+                        addSectionImage(root, image);
+                    });
+                }
+            }
+
+            $('#add-section').click(function () { addSection(); });
+
+            $('#add-project').click(function () {
+                clearModal();
+                $('#modal').modal('show');
+            });
+
+            function clearModal () {
+                $('#project-sections').html(null);
+                $('#project-name').val(null);
+                $('#project-description').val(null);
+                $('#project-latitude').val(null);
+                $('#project-longtitude').val(null);
+            }
+
+            $('#save-works-changes').click(function () {
+                debugger;
+                var projectId = $('#id-modal').val();
+                var projectName = $('#project-name').val();
+                var projectDescription = $('#project-description').val();
+                var projectLatitude = $('#project-latitude').val();
+                var projectLongtitude = $('#project-longtitude').val();
+                var project = {
+                    id: projectId,
+                    name: projectName,
+                    description: projectDescription,
+                    latitude: projectLatitude,
+                    longtitude: projectLongtitude,
+                    sections: []
+                };
+                $('.project-section').each(function (i, section) {
+                    debugger;
+                    var sectionId = $(section).data('id');
+                    var sectionName = $(section).find('.section-name').val();
+                    var sectionDescription = $(section).find('.section-description').val();
+                    var projectSection = {
+                        id: sectionId,
+                        name: sectionName,
+                        description: sectionDescription,
+                        images: []
+                    };
+                    $(this).find('.section-image-list .section-image-row').each(function (i, row) {
+                        debugger;
+                        var image = $(row).find('img');
+                        var imageId = image.data('id');
+                        var imageUpdated = image.data('updated');
+                        var imageFile = $(row).find('input')[0].files[0];
+                        if (!((!imageId) && (!imageUpdated) && (!imageFile))) {
+                            projectSection.images.push({
+                                id: imageId,
+                                updated: imageUpdated,
+                                file: imageFile
+                            });
+                        }
+                    });
+                    project.sections.push(projectSection);
+                });
+            });
         });
-    });
     </script>
 }

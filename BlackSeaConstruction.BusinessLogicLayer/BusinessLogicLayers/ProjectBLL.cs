@@ -24,7 +24,7 @@ namespace BlackSeaConstruction.BusinessLogicLayer.BusinessLogicLayers
             {
                 cfg.CreateMap<ProjectSection, ProjectSectionVM>().AfterMap((m, vm) =>
                 {
-                    vm.Images = _projectSectionImages.GetSectionImagesBySectionId(m.Id);
+                    vm.Images = _projectSectionImages.GetSectionImagesBySectionId(m.Id).Select(x => new ProjectSectionImageVM { Id = x.Id, Image = x.Image });
                     vm.ProjectName = _projects.FindById(m.ProjectId)?.ProjectName;
                 });
                 cfg.CreateMap<ProjectSectionVM, ProjectSection>();
@@ -52,7 +52,7 @@ namespace BlackSeaConstruction.BusinessLogicLayer.BusinessLogicLayers
                 ProjectName = project.ProjectName,
                 SectionName = x.SectionName,
                 Description = x.Description,
-                Images = _projectSectionImages.GetSectionImagesBySectionId(x.Id)
+                Images = _projectSectionImages.GetSectionImagesBySectionId(x.Id).Select(i => new ProjectSectionImageVM { Id = i.Id, Image = i.Image } )
             }).ToList();
             return projectVM;
         }
@@ -77,9 +77,10 @@ namespace BlackSeaConstruction.BusinessLogicLayer.BusinessLogicLayers
             return projectVMs;
         }
 
-        public bool Delete(int id) => _projects.Delete(id);
-        public bool RestoreMessage(int id) => _projects.Restore(id);
-        public bool DeleteOrRestoreMessage(int id) => _projects.FindById(id).IsDeleted ? _projects.Restore(id) : _projects.Delete(id);
+        public bool DeleteProject(int id) => _projects.Delete(id);
+        public bool RestoreProject(int id) => _projects.Restore(id);
+        public bool DeleteOrRestoreProject(int id) => _projects.FindById(id).IsDeleted ? _projects.Restore(id) : _projects.Delete(id);
 
+        public bool DeleteSectionImage(int id) => _projectSectionImages.Delete(id);
     }
 }
