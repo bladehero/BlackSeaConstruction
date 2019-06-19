@@ -136,11 +136,11 @@
                 window.location.replace("@Url.Action("Index", "Messages", new { area = "Admin" })?size=" + size + "&withDeleted=" + $('#isDeleted').is(':checked') + '&number=' + $('.btn-page.active').text());
             }
 
-            $('.message-row').click(function () {
+            $('.message-row').find('td,th').not('.delete-restore-btn').click(function () {
                 $.ajax({
                     url: '@Url.Action("GetMessageById", "Messages", new { area = "Admin" })',
                     method: 'GET',
-                    data: { id: $(this).data('id') },
+                    data: { id: $(this).parent().data('id') },
                     success: function (data) {
                         var _blank = '—';
                         $('#id-modal').val(data.id);
@@ -239,7 +239,7 @@
                             success: function (data) {
                                 if (data.result) {
                                     Swal.fire(
-                                        'Deleted!',
+                                        (isDeleted ? "Restored" : "Deleted") + '!',
                                         'Record has been ' + (isDeleted ? "restored" : "deleted") + '.',
                                         'success'
                                     ).then(function () {

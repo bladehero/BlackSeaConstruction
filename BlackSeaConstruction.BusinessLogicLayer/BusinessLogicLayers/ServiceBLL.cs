@@ -24,13 +24,31 @@ namespace BlackSeaConstruction.BusinessLogicLayer.BusinessLogicLayers
             {
                 cfg.CreateMap<Service, ServiceVM>().AfterMap((m, vm) =>
                 {
-                    vm.Images = _serviceImages.GetServiceImageByServiceId(m.Id);
+                    vm.Images = _serviceImages.GetServiceImageByServiceId(m.Id).Select(x => new ServiceImageVM
+                    {
+                        Id = x.Id,
+                        Image = x.Image,
+                        IsDeleted = x.IsDeleted,
+                        ServiceId = x.ServiceId
+                    });
                     vm.ServiceType = _serviceTypes.FindById(m.TypeId)?.TypeName;
                 });
                 cfg.CreateMap<ServiceVM, Service>();
                 cfg.CreateMap<ServiceType, ServiceTypeVM>();
                 cfg.CreateMap<ServiceTypeVM, ServiceType>();
             }).CreateMapper();
+        }
+
+        public ServiceTypeVM GetServiceTypeById(int? id)
+        {
+            if (!id.HasValue)
+            {
+                return null;
+            }
+
+            var serviceType = _serviceTypes.FindById(id.Value);
+            var serviceTypeVM = Map<ServiceType, ServiceTypeVM>(serviceType);
+            return serviceTypeVM;
         }
 
         public ServiceVM GetServiceById(int? id)
@@ -45,9 +63,23 @@ namespace BlackSeaConstruction.BusinessLogicLayer.BusinessLogicLayers
             return serviceVM;
         }
 
-        public IEnumerable<ServiceTypeVM> GetAllServiceTypes()
+        public IEnumerable<ServiceVM> GetServices(int count = 10, int skip = 0, bool withDeleted = true)
         {
-            var serviceTypes = _serviceTypes.FindAll();
+            var services = _services.Take(count, skip, withDeleted);
+            var servicesVM = Map<IEnumerable<Service>, IEnumerable<ServiceVM>>(services);
+            return servicesVM;
+        }
+
+        public IEnumerable<ServiceVM> GetAllServices()
+        {
+            var services = _services.FindAll();
+            var servicesVM = Map<IEnumerable<Service>, IEnumerable<ServiceVM>>(services);
+            return servicesVM;
+        }
+
+        public IEnumerable<ServiceTypeVM> GetAllServiceTypes(bool withDeleted = false)
+        {
+            var serviceTypes = _serviceTypes.FindAll(withDeleted);
             var serviceTypeVMs = serviceTypes.Select(x => new ServiceTypeVM
             {
                 Id = x.Id,
@@ -56,9 +88,26 @@ namespace BlackSeaConstruction.BusinessLogicLayer.BusinessLogicLayers
                 {
                     Id = s.Id,
                     ServiceName = s.ServiceName
-                })
+                }),
+                IsDeleted = x.IsDeleted
             }).ToList();
             return serviceTypeVMs;
         }
+
+        public bool MergeServiceType(ServiceTypeVM serviceTypeVM)
+        {
+            var serviceType = Map<ServiceTypeVM, ServiceType>(serviceTypeVM);
+            var result = _serviceTypes.Merge(serviceType);
+            serviceTypeVM.Id = serviceType.Id;
+            return result;
+        }
+
+        public bool DeleteService(int id) => _services.Delete(id);
+        public bool RestoreService(int id) => _services.Restore(id);
+        public bool DeleteOrRestoreService(int id) => _services.FindById(id).IsDeleted ? _services.Restore(id) : _services.Delete(id);
+
+        public bool DeleteServiceType(int id) => _serviceTypes.Delete(id);
+        public bool RestoreServiceType(int id) => _serviceTypes.Restore(id);
+        public bool DeleteOrRestoreServiceType(int id) => _serviceTypes.FindById(id).IsDeleted ? _serviceTypes.Restore(id) : _serviceTypes.Delete(id);
     }
 }

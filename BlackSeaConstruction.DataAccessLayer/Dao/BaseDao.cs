@@ -81,9 +81,9 @@ namespace BlackSeaConstruction.DataAccessLayer.Dao
             var sql = $"update {TableName} set {string.Join(",", properties.Select(x => x.Name + " = @" + x.Name))} where Id = @Id";
             return Connection.Execute(sql, item) > 0;
         }
-        public virtual bool Delete(int id) => Connection.Execute($"update {TableName} set IsDeleted = 1 where Id = {id}") > 0;
+        public virtual bool Delete(int id) => Connection.Execute($"update {TableName} set IsDeleted = 1, DateModified = getdate() where Id = {id}") > 0;
         public virtual bool Delete(T item) => Delete(item.Id);
-        public virtual bool Restore(int id) => Connection.Execute($"update {TableName} set IsDeleted = 0 where Id = {id}") > 0;
+        public virtual bool Restore(int id) => Connection.Execute($"update {TableName} set IsDeleted = 0, DateModified = getdate() where Id = {id}") > 0;
         public virtual bool Restore(T item) => Restore(item.Id);
         public virtual bool Merge(T item) => item?.Id == 0 ? Insert(item) > 0 : Update(item);
 

@@ -1,1 +1,407 @@
-﻿
+﻿@model BlackSeaConstruction.Web.Areas.Admin.Models.NewsIndexVM
+
+<div class="row animated fadeIn mt-2">
+    <div class="col-2 ml-2">
+        <select class="form-control form-control-sm" id="select-size">
+            @foreach (var size in BlackSeaConstruction.BusinessLogicLayer.ViewModels.PageVM.Sizes)
+            {
+                <option @(size == Model.Pages.Size ? "selected" : "")>@size</option>
+            }
+        </select>
+    </div>
+    <div class="col-2 text-white">
+        <div>
+            <input type="checkbox" id="isDeleted" name="isDeleted" @(Model.WithDeleted ? " checked" : "")>
+            <label for="isDeleted">With Deleted</label>
+        </div>
+    </div>
+    <button type="button" class="btn btn-warning ml-auto mr-3" id="add-news">Add News</button>
+    <button type="button" class="btn btn-outline-light mr-3" id="search">Search</button>
+</div>
+<div class="row animated fadeInUp mt-2 pb-2">
+    <div class="col-12">
+        <table class="table table-hover bg-light shadow rounded-bottom table-sm">
+            <thead>
+                <tr class="thead-dark text-center">
+                    <th scope="col">Id</th>
+                    <th scope="col">Header</th>
+                    <th scope="col">Link</th>
+                    <th scope="col">Date of publication</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var news in Model.News)
+                {
+                    <tr class="text-center news-row" data-id="@news.Id">
+                        <th class="pointer" scope="row">@news.Id</th>
+                        <td class="pointer">@news.Header</td>
+                        <td class="pointer"><a href="@news.Link" target="_blank" class="text-warning">@news.Link</a></td>
+                        <td class="pointer">@news.DatePublication.ToString()</td>
+                        <td class="pointer delete-restore-btn" data-status="@news.IsDeleted.ToString().ToLower()">@(news.IsDeleted ? "✔" : "❌")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-auto ml-auto mr-2">
+        <div class="btn-group shadow" role="group">
+            <button type="button" class="btn btn-outline-light btn-sm" id="previous-page"><</button>
+            @{
+                foreach (var number in Model.Pages.Pages)
+                {
+                    if (number == Model.Pages.Number)
+                    {
+                        <button type="button" class="btn btn-outline-light btn-sm btn-page active"><b>@number</b></button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-outline-light btn-sm btn-page"><b>@number</b></button>
+                    }
+                }
+            }
+            <button type="button" class="btn btn-outline-light btn-sm" id="next-page">></button>
+        </div>
+    </div>
+</div>
+
+@section Modals {
+    <div class="modal fade" id="modalNews" tabindex="-1" role="dialog" aria-labelledby="modalNewsTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalNewsTitle">Add/Update News</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="id-modal" />
+                    <div class="row rounded mb-2 mx-2 py-2" id="news-properties">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="project-name">Name</label>
+                                <input type="text" class="form-control" id="news-header" aria-describedby="nameHelp" placeholder="Enter project name..." />
+                                <small id="nameHelp" class="form-text text-warning">This field is required.</small>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="project-description">Description</label>
+                                <textarea class="form-control" id="news-description" placeholder="Enter project description..." maxlength="1000"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-12 text-center" id="news-image-section">
+                            <div class="input-group input-group-sm mb-2 text-left">
+                                <div class="custom-file">
+                                    <input type="file" name="files" class="custom-file-input" id="inputGroupFile" aria-describedby="delete-news-image">
+                                    <label class="custom-file-label" for="inputGroupFile">Choose news image...</label>
+                                </div>
+                                <div class="input-group-append">
+                                    <button class="btn btn-danger" type="button" id="delete-news-image">Delete Image</button>
+                                </div>
+                            </div>
+                            <img src="#" class="rounded mx-auto d-none img-news-thumbnail shadow-sm w-50 mb-2" id="news-image">
+                        </div>
+                        <div class="col-12 mt-2">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="list-group list-group-horizontal text-center" id="list-tab" role="tablist">
+                                        <a class="list-group-item list-group-item-action active" id="list-services-list" data-toggle="list" href="#list-services" role="tab">Services</a>
+                                        <a class="list-group-item list-group-item-action" id="list-projects-list" data-toggle="list" href="#list-projects" role="tab">Works</a>
+                                        <a class="list-group-item list-group-item-action" id="list-url-list" data-toggle="list" href="#list-url" role="tab">Global Url's</a>
+                                    </div>
+                                </div>
+                                <div class="col-12 mt-3">
+                                    <div class="tab-content" id="nav-tabContent">
+                                        <div class="tab-pane fade show active" id="list-services" role="tabpanel" aria-labelledby="list-services-list">
+                                            <select class="form-control form-control" id="select-services">
+                                                @foreach (var service in Model.ServicesDictionary)
+                                                {
+                                                    <option value="@service.Key">@service.Value</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="tab-pane fade" id="list-projects" role="tabpanel" aria-labelledby="list-projects-list">
+                                            <select class="form-control form-control" id="select-works">
+                                                @foreach (var service in Model.WorksDictionary)
+                                                {
+                                                    <option value="@service.Key">@service.Value</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="tab-pane fade" id="list-url" role="tabpanel" aria-labelledby="list-url-list">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" id="global-url" placeholder="Enter url...">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-warning" id="save-news-changes">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            function search() {
+                var size = $('#select-size :selected').text();
+                window.location.replace("@Url.Action("Index", "News", new { area = "Admin" })?size=" + size + "&withDeleted=" + $('#isDeleted').is(':checked') + '&number=' + $('.btn-page.active').text());
+            }
+
+            function deleteImage() {
+                $('#inputGroupFile + label').html('Choose news image...');
+                $('#inputGroupFile').val(null);
+                $('#news-image').addClass('d-none').removeClass('d-block').attr('src', '#');
+            }
+
+            function clearModal() {
+                $('#id-modal').val(null);
+                $('#news-header').val(null);
+                $('#news-description').val(null);
+                deleteImage();
+                $('#select-works option').attr('selected', false).first('selected', true);
+                $('#select-services option').attr('selected', false).first('selected', true);
+                $('#global-url').val(null);
+                $('#list-tab .list-group-item').removeClass('active').first().addClass('active');
+                $('#nav-tabContent .tab-pane').removeClass('show active').first().addClass('show active');
+            }
+
+            $('#add-news').click(function () {
+                clearModal();
+                $('#modalNews').modal('show');
+            });
+
+            $('#delete-news-image').click(function () {
+                deleteImage();
+            });
+
+            $('.news-row').find('td,th').not('.delete-restore-btn').click(function () {
+                $.ajax({
+                    url: '@Url.Action("GetNewsById", "News", new { area = "Admin" })',
+                    method: 'GET',
+                    data: { id: $(this).parent().data('id') },
+                    success: function (data) {
+                        clearModal();
+                        $('#id-modal').val(data.id);
+                        $('#news-header').val(data.header);
+                        $('#news-description').val(data.description);
+                        $('#inputGroupFile + label').html(data.image);
+                        $('#news-image').attr('src', data.image).removeClass('d-none');
+                        if (data.link) {
+                            $('#list-tab .list-group-item').removeClass('active');
+                            $('#nav-tabContent .tab-pane').removeClass('show active');
+                            var array = data.link.split('/');
+                            if (array && ((array[0] && array[0].toLowerCase() == 'works')
+                                || (array[1] && array[1].toLowerCase() == 'works')
+                                || (array[2] && array[2].toLowerCase() == 'works'))) {
+                                $('#select-works option[value="' + data.link + '"]').attr('selected', true);
+                                $('#list-projects-list').addClass('active');
+                                $('#list-projects').addClass('show active');
+                            } else if (array && ((array[0] && array[0].toLowerCase() == 'services')
+                                || (array[1] && array[1].toLowerCase() == 'services')
+                                || (array[2] && array[2].toLowerCase() == 'services'))) {
+                                $('#select-services option[value="' + data.link + '"]').attr('selected', true);
+                                $('#list-services-list').addClass('active');
+                                $('#list-services').addClass('show active');
+                            } else {
+                                $('#global-url').val(data.link);
+                                $('#list-url-list').addClass('active');
+                                $('#list-url').addClass('show active');
+                            }
+                        }
+                        $('#modalNews').modal('show');
+                    },
+                    error: function () {
+                        Swal.fire(
+                            'Error!',
+                            'Server error was occured. Please, contact support team!',
+                            'error'
+                        );
+                    }
+                });
+            });
+
+            $("#inputGroupFile").off("change").on("change", function () {
+                var input = $(this)[0];
+                $(this).next(".custom-file-label").html(input.files[0].name);
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#news-image').attr("src", e.target.result).removeClass("d-none").addClass("d-block animated fadeInUp");
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }
+                $('#inputGroupFile').data('updated', true);
+            });
+
+            $('#save-news-changes').click(function () {
+                var id = $('#id-modal').val();
+                var header = $('#news-header').val();
+                var description = $('#news-description').val();
+                if (!id && (!$('#inputGroupFile')[0] || !$('#inputGroupFile')[0].files[0] || !$('#inputGroupFile')[0].files[0].name || $('#inputGroupFile')[0].files[0].size == 0)) {
+                    Swal.fire(
+                        'Error!',
+                        "Image is empty or not exist.",
+                        'error'
+                    );
+                    return;
+                }
+                if ($('#inputGroupFile')[0] && $('#inputGroupFile')[0].files[0] && $('#inputGroupFile')[0].files[0].name) {
+                    var image = $('#inputGroupFile')[0].files[0].name;
+                }
+                var updated = $('#inputGroupFile').data('updated');
+                var link = null;
+                if ($('#list-services').hasClass('active') || $('#list-services').hasClass('show')) {
+                    link = $('#select-services option:selected').val();
+                } else if ($('#list-projects').hasClass('active') || $('#list-projects').hasClass('show')) {
+                    link = $('#select-works option:selected').val();
+                } else {
+                    link = $('#global-url').val();
+                }
+
+                $.ajax({
+                    url: '@Url.Action("MergeNews", "News", new { area = "Admin" })',
+                    method: 'POST',
+                    data: { id: id, header: header, description: description, image: image, updated: updated, url: link },
+                    success: function (data) {
+                        if (data.result) {
+                            if ($('#inputGroupFile')[0] && $('#inputGroupFile')[0].files[0]) {
+                                var fd = new FormData();
+                                fd.append('file', $('#inputGroupFile')[0].files[0]);
+                                $.ajax({
+                                    url: '@Url.Action("UploadImage", "News", new { area = "Admin" })',
+                                    method: 'POST',
+                                    data: fd,
+                                    processData: false,
+                                    contentType: false,
+                                    success: function (data) {
+                                        if (data.result) {
+                                            Swal.fire(
+                                                'Success!',
+                                                'News was added/updated.',
+                                                'success'
+                                            ).then(function () {
+                                                search();
+                                            });
+                                        } else {
+                                            Swal.fire(
+                                                'Error!',
+                                                "Something go wrong or news wasn't found.",
+                                                'error'
+                                            );
+                                        }
+                                    },
+                                    error: function () {
+                                        Swal.fire(
+                                            'Error!',
+                                            'Server error was occured. Please, contact support team!',
+                                            'error'
+                                        );
+                                    }
+                                });
+                            } else {
+                                Swal.fire(
+                                    'Success!',
+                                    'News was added/updated.',
+                                    'success'
+                                ).then(function () {
+                                    search();
+                                });
+                            }
+                        } else {
+                            Swal.fire(
+                                'Error!',
+                                "Something go wrong or news wasn't found.",
+                                'error'
+                            );
+                        }
+                    },
+                    error: function () {
+                        Swal.fire(
+                            'Error!',
+                            'Server error was occured. Please, contact support team!',
+                            'error'
+                        );
+                    }
+                });
+            });
+
+            $('#search').click(search);
+
+            if (@Model.Pages.HasPreviousPage.ToString().ToLower()) {
+            $('#previous-page').click(function () {
+                url = '?size=' + $('#select-size').val() + '&number=' + @(Model.Pages.Number - 1) + "&withDeleted=" + $('#isDeleted').is(':checked');
+                window.location.replace(url);
+            });
+            } else {
+                $('#previous-page').addClass('disabled');
+            }
+
+            if (@Model.Pages.HasNextPage.ToString().ToLower()) {
+                $('#next-page').click(function () {
+                    url = '?size=' + $('#select-size').val() + '&number=' + @(Model.Pages.Number + 1) + "&withDeleted=" + $('#isDeleted').is(':checked');
+                    window.location.replace(url);
+                });
+            } else {
+                $('#next-page').addClass('disabled');
+            }
+
+            $('.btn-page').click(function () {
+                url = '?size=' + $('#select-size').val() + '&number=' + $(this).text() + "&withDeleted=" + $('#isDeleted').is(':checked');
+                window.location.replace(url);
+            });
+
+            $('.delete-restore-btn').click(function () {
+                var isDeleted = $(this).data('status');
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "This record will be " + (isDeleted ? "restored" : "deleted") + "!",
+                    type: 'warning',
+                    showCancelButton: true
+                }).then((result) => {
+                    if (result.value) {
+                        $.ajax({
+                            url: '@Url.Action("DeleteOrRestore", "News", new { area = "Admin" })',
+                            method: 'POST',
+                            data: { id: $(this).parent().data('id') },
+                            success: function (data) {
+                                if (data.result) {
+                                    Swal.fire(
+                                        (isDeleted ? "Restored" : "Deleted") + '!',
+                                        'Record has been ' + (isDeleted ? "restored" : "deleted") + '.',
+                                        'success'
+                                    ).then(function () {
+                                        search();
+                                    });
+                                } else {
+                                    Swal.fire(
+                                        'Error!',
+                                        "Record wasn't found.",
+                                        'error'
+                                    );
+                                }
+                            },
+                            error: function () {
+                                Swal.fire(
+                                    'Error!',
+                                    'Server error was occured. Please, contact support team!',
+                                    'error'
+                                );
+                            }
+                        });
+                    }
+                });
+        });
+    });
+    </script>
+}

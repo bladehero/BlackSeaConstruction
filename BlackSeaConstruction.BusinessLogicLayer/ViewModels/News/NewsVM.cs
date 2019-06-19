@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 
 namespace BlackSeaConstruction.BusinessLogicLayer.ViewModels.News
 {
@@ -11,5 +10,6 @@ namespace BlackSeaConstruction.BusinessLogicLayer.ViewModels.News
         public string Image { get; set; }
         public string Link { get; set; }
         public DateTime DatePublication { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

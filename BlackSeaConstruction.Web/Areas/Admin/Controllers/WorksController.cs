@@ -2,9 +2,8 @@
 using BlackSeaConstruction.BusinessLogicLayer.ViewModels.Projects;
 using BlackSeaConstruction.Web.Areas.Admin.Models;
 using BlackSeaConstruction.Web.Extensions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace BlackSeaConstruction.Web.Areas.Admin.Controllers
@@ -79,14 +78,25 @@ namespace BlackSeaConstruction.Web.Areas.Admin.Controllers
             return Json(new { result, message });
         }
 
-        public IActionResult UploadWorkImages(IEnumerable<IFormFile> files)
+        public IActionResult UploadWorkImages()
         {
             var result = true;
             var message = string.Empty;
 
             try
             {
-
+                var root = ImageExtensions.ResourceDirectory;
+                foreach (var file in Request.Form.Files)
+                {
+                    if (file.Length > 0)
+                    {
+                        var path = Path.Combine(root, ImageExtensions.ImageFolder, ImageExtensions.WorksFolder, file.Name);
+                        using (var fs = new FileStream(path, FileMode.Create))
+                        {
+                            file.CopyTo(fs);
+                        }
+                    }
+                }
             }
             catch (System.Exception ex)
             {

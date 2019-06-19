@@ -11,6 +11,8 @@ namespace BlackSeaConstruction.BusinessLogicLayer.BusinessLogicLayers
     {
         NewsDao _news;
 
+        public int NewsCount(bool withDeleted = true) => _news.Count(withDeleted);
+
         public NewsBLL(IDbConnection connection)
         {
             Mapper = new MapperConfiguration(cfg =>
@@ -46,6 +48,13 @@ namespace BlackSeaConstruction.BusinessLogicLayer.BusinessLogicLayers
             return newsVM;
         }
 
+        public IEnumerable<NewsVM> GetNews(int count, int skip = 0, bool withDeleted = true)
+        {
+            var news = _news.Take(count, skip, withDeleted);
+            var newsVM = Map<IEnumerable<News>, IEnumerable<NewsVM>>(news);
+            return newsVM;
+        }
+
         public bool MergeNews(NewsVM newsVM)
         {
             var news = Map<NewsVM, News>(newsVM);
@@ -53,5 +62,7 @@ namespace BlackSeaConstruction.BusinessLogicLayer.BusinessLogicLayers
         }
 
         public bool DeleteNews(int id) => _news.Delete(id);
+        public bool RestoreNews(int id) => _news.Restore(id);
+        public bool DeleteOrRestoreNews(int id) => _news.FindById(id).IsDeleted ? _news.Restore(id) : _news.Delete(id);
     }
 }

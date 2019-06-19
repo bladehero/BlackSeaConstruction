@@ -9,9 +9,9 @@ namespace BlackSeaConstruction.DataAccessLayer.Dao
     {
         public ServiceImageDao(IDbConnection connection) : base("dbo.ServiceImages", connection) { }
 
-        public IEnumerable<string> GetServiceImageByServiceId(int serviceId)
+        public IEnumerable<ServiceImage> GetServiceImageByServiceId(int serviceId)
         {
-            return Connection.Query<string>($"select [Image] from {TableName}  where ServiceId = {serviceId}");
+            return Connection.Query<ServiceImage>($"{SelectFromString} where ServiceId = {serviceId} and IsDeleted = 0");
         }
     }
 }

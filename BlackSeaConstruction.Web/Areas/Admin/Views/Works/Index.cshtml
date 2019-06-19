@@ -129,12 +129,12 @@
                 window.location.replace("@Url.Action("Index", "Works", new { area = "Admin" })?size=" + size + "&withDeleted=" + $('#isDeleted').is(':checked') + '&number=' + $('.btn-page.active').text());
             }
 
-            $('.work-row').click(function () {
+            $('.work-row').find('td,th').not('.delete-restore-btn').click(function () {
                 clearModal();
                 $.ajax({
                     url: '@Url.Action("GetWorkById", "Works", new { area = "Admin" })',
                     method: 'GET',
-                    data: { id: $(this).data('id') },
+                    data: { id: $(this).parent().data('id') },
                     success: function (data) {
                         $('#id-modal').val(data.work.id);
                         $('#project-name').val(data.work.projectName);
@@ -235,7 +235,7 @@
                             success: function (data) {
                                 if (data.result) {
                                     Swal.fire(
-                                        'Deleted!',
+                                        (isDeleted ? "Restored" : "Deleted") + '!',
                                         'Record has been ' + (isDeleted ? "restored" : "deleted") + '.',
                                         'success'
                                     ).then(function () {
@@ -276,7 +276,7 @@
                     '<div class="section-image-row animated fadeInLeft text-center">' +
                         '<div class="input-group input-group-sm mb-2">' +
                             '<div class="custom-file text-left">' +
-                                '<input type="file" class="custom-file-input inputGroupFile" id="inputGroupFile" aria-describedby="inputGroupFileAddon">' +
+                                '<input type="file" name="files" class="custom-file-input inputGroupFile" id="inputGroupFile" aria-describedby="inputGroupFileAddon">' +
                                 '<label class="custom-file-label" for="inputGroupFile">' + (path ? path : 'Choose file...') + '</label>' +
                             '</div>' +
                             '<div class="input-group-append">' +
@@ -456,13 +456,17 @@
                     method: 'POST',
                     data: project,
                     success: function (data) {
-                        debugger;
+                        var formData = new FormData();
+                        for (var i = 0; i < images.length; i++) {
+                            formData.append(images[i].name, images[i]);
+                        }
                         if (data.result) {
                             $.ajax({
                                 url: '@Url.Action("UploadWorkImages", "Works", new { area = "Admin" })',
                                 method: 'POST',
                                 processData: false,
-                                data: images,
+                                contentType: false,
+                                data: formData,
                                 success: function (data) {
                                     debugger;
                                     if (data.result) {

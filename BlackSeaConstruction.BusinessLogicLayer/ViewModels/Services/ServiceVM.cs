@@ -8,6 +8,7 @@ namespace BlackSeaConstruction.BusinessLogicLayer.ViewModels.Services
         public string ServiceName { get; set; }
         public string Description { get; set; }
         public string ServiceType { get; set; }
-        public IEnumerable<string> Images { get; set; }
+        public bool IsDeleted { get; set; }
+        public IEnumerable<ServiceImageVM> Images { get; set; }
     }
 }
