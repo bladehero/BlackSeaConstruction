@@ -11,7 +11,7 @@ namespace BlackSeaConstruction.Web.Areas.Admin.Controllers
     {
         public IActionResult Index(int number = 1, int size = 10, bool withDeleted = false)
         {
-            var pages = new PageVM(UnitOfWork.Message.MessagesCount(withDeleted), number, size);
+            var pages = new PageVM(UnitOfWork.Services.ServicesCount(withDeleted), number, size);
             var services = UnitOfWork.Services.GetServices(pages.Size, pages.Skip, withDeleted);
             var serviceTypes = UnitOfWork.Services.GetAllServiceTypes(true);
             var model = new ServiceIndexVM

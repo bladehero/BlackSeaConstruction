@@ -39,17 +39,8 @@ namespace BlackSeaConstruction.BusinessLogicLayer.BusinessLogicLayers
             }).CreateMapper();
         }
 
-        public ServiceTypeVM GetServiceTypeById(int? id)
-        {
-            if (!id.HasValue)
-            {
-                return null;
-            }
-
-            var serviceType = _serviceTypes.FindById(id.Value);
-            var serviceTypeVM = Map<ServiceType, ServiceTypeVM>(serviceType);
-            return serviceTypeVM;
-        }
+        #region Services
+        public int ServicesCount(bool withDeleted = true) => _services.Count(withDeleted);
 
         public ServiceVM GetServiceById(int? id)
         {
@@ -77,6 +68,32 @@ namespace BlackSeaConstruction.BusinessLogicLayer.BusinessLogicLayers
             return servicesVM;
         }
 
+        public bool MergeService(ServiceVM serviceVM)
+        {
+            var service = Map<ServiceVM, Service>(serviceVM);
+            var result = _services.Merge(service);
+            serviceVM.Id = service.Id;
+            return result;
+        }
+
+        public bool DeleteService(int id) => _services.Delete(id);
+        public bool RestoreService(int id) => _services.Restore(id);
+        public bool DeleteOrRestoreService(int id) => _services.FindById(id).IsDeleted ? _services.Restore(id) : _services.Delete(id);
+        #endregion
+
+        #region ServiceTypes
+        public ServiceTypeVM GetServiceTypeById(int? id)
+        {
+            if (!id.HasValue)
+            {
+                return null;
+            }
+
+            var serviceType = _serviceTypes.FindById(id.Value);
+            var serviceTypeVM = Map<ServiceType, ServiceTypeVM>(serviceType);
+            return serviceTypeVM;
+        }
+
         public IEnumerable<ServiceTypeVM> GetAllServiceTypes(bool withDeleted = false)
         {
             var serviceTypes = _serviceTypes.FindAll(withDeleted);
@@ -102,12 +119,9 @@ namespace BlackSeaConstruction.BusinessLogicLayer.BusinessLogicLayers
             return result;
         }
 
-        public bool DeleteService(int id) => _services.Delete(id);
-        public bool RestoreService(int id) => _services.Restore(id);
-        public bool DeleteOrRestoreService(int id) => _services.FindById(id).IsDeleted ? _services.Restore(id) : _services.Delete(id);
-
         public bool DeleteServiceType(int id) => _serviceTypes.Delete(id);
         public bool RestoreServiceType(int id) => _serviceTypes.Restore(id);
         public bool DeleteOrRestoreServiceType(int id) => _serviceTypes.FindById(id).IsDeleted ? _serviceTypes.Restore(id) : _serviceTypes.Delete(id);
+        #endregion
     }
 }
