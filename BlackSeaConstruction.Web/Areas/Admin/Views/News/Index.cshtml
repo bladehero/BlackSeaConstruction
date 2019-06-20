@@ -1,7 +1,7 @@
 ﻿@model BlackSeaConstruction.Web.Areas.Admin.Models.NewsIndexVM
 
-<div class="row animated fadeIn mt-2">
-    <div class="col-2 ml-2">
+<div class="row animated fadeIn mt-2 justify-content-center">
+    <div class="col-12 col-md-4">
         <select class="form-control form-control-sm" id="select-size">
             @foreach (var size in BlackSeaConstruction.BusinessLogicLayer.ViewModels.PageVM.Sizes)
             {
@@ -9,15 +9,16 @@
             }
         </select>
     </div>
-    <div class="col-2 text-white">
-        <div>
-            <input type="checkbox" id="isDeleted" name="isDeleted" @(Model.WithDeleted ? " checked" : "")>
-            <label for="isDeleted">With Deleted</label>
-        </div>
+    <div class="col-6 col-md-4 text-white text-left mt-2 mt-md-0">
+        <input type="checkbox" id="isDeleted" name="isDeleted" @(Model.WithDeleted ? " checked" : "")>
+        <label for="isDeleted">With Deleted</label>
     </div>
-    <button type="button" class="btn btn-warning ml-auto mr-3" id="add-news">Add News</button>
-    <button type="button" class="btn btn-outline-light mr-3" id="search">Search</button>
+    <div class="col-6 col-md-4 text-right mt-2 mt-md-0">
+        <button type="button" class="btn btn-warning" id="add-news">Add News</button>
+        <button type="button" class="btn btn-outline-light" id="search">Search</button>
+    </div>
 </div>
+
 <div class="row animated fadeInUp mt-2 pb-2">
     <div class="col-12">
         <table class="table table-hover bg-light shadow rounded-bottom table-sm">
@@ -153,6 +154,8 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
+            activeLink('news-link');
+
             function search() {
                 var size = $('#select-size :selected').text();
                 window.location.replace("@Url.Action("Index", "News", new { area = "Admin" })?size=" + size + "&withDeleted=" + $('#isDeleted').is(':checked') + '&number=' + $('.btn-page.active').text());

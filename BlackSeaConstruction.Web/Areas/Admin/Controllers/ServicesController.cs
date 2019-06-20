@@ -90,7 +90,7 @@ namespace BlackSeaConstruction.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult UploadImages(IEnumerable<IFormFile> files)
+        public IActionResult UploadImages()
         {
             var result = true;
             var message = string.Empty;
@@ -98,11 +98,11 @@ namespace BlackSeaConstruction.Web.Areas.Admin.Controllers
             try
             {
                 var root = ImageExtensions.ResourceDirectory;
-                foreach (var file in files)
+                foreach (var file in Request.Form.Files)
                 {
                     if (file.Length > 0)
                     {
-                        var path = Path.Combine(root, ImageExtensions.ImageFolder, ImageExtensions.ServicesFolder, file.FileName);
+                        var path = Path.Combine(root, ImageExtensions.ImageFolder, ImageExtensions.ServicesFolder, file.Name);
                         using (var fs = new FileStream(path, FileMode.Create))
                         {
                             file.CopyTo(fs);

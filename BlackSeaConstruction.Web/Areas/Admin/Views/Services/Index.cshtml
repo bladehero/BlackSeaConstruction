@@ -1,7 +1,7 @@
 ﻿@model BlackSeaConstruction.Web.Areas.Admin.Models.ServiceIndexVM
 
-<div class="row animated fadeIn mt-2">
-    <div class="col-2 ml-2">
+<div class="row animated fadeIn mt-2 justify-content-center">
+    <div class="col-12 col-md-2">
         <select class="form-control form-control-sm" id="select-size">
             @foreach (var size in BlackSeaConstruction.BusinessLogicLayer.ViewModels.PageVM.Sizes)
             {
@@ -9,16 +9,17 @@
             }
         </select>
     </div>
-    <div class="col-4 text-white">
-        <div>
-            <input type="checkbox" id="isDeleted" name="isDeleted" @(Model.WithDeleted ? " checked" : "")>
-            <label for="isDeleted">With Deleted</label>
-        </div>
+    <div class="col-12 col-md-3 text-white text-left mt-2 mt-md-0">
+        <input type="checkbox" id="isDeleted" name="isDeleted" @(Model.WithDeleted ? " checked" : "")>
+        <label for="isDeleted">With Deleted</label>
     </div>
-    <button type="button" class="btn btn-outline-warning ml-auto mr-3" id="change-service-types">Service Types</button>
-    <button type="button" class="btn btn-warning mr-3" id="add-service">Add Service</button>
-    <button type="button" class="btn btn-outline-light mr-3" id="search">Search</button>
+    <div class="col-12 col-md-7 text-right mt-2 mt-md-0">
+        <button type="button" class="btn btn-outline-warning" id="change-service-types">Service Types</button>
+        <button type="button" class="btn btn-warning" id="add-service">Add Service</button>
+        <button type="button" class="btn btn-outline-light" id="search">Search</button>
+    </div>
 </div>
+
 <div class="row animated fadeInUp mt-2 pb-2">
     <div class="col-12">
         <table class="table table-hover bg-light shadow rounded-bottom table-sm">
@@ -177,6 +178,7 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
+            activeLink('services-link');
 
             $('.service-row').find('td,th').not('.delete-restore-btn').click(function () {
                 $.ajax({
@@ -184,7 +186,7 @@
                     method: 'GET',
                     data: { id: $(this).parent().data('id') },
                     success: function (data) {
-                        
+
                         if (data) {
                             $('#id-modal').val(data.id);
                             $('#service-name').val(data.serviceName);
@@ -214,13 +216,12 @@
                 var description = $('#service-description').val();
                 var typeId = $('#select-service-type').val();
                 var images = [];
-                var fd = new FormData();
-                fd.append('file', $('#inputGroupFile')[0].files[0]);
-                $('.service-image-row').each(function (i, image) {                    
+                var files = [];
+                $('.service-image-row').each(function (i, image) {
                     var fileName = null;
                     if ($(image).find('input.inputGroupFile')[0] && $(image).find('input.inputGroupFile')[0].files[0]) {
                         fileName = $(image).find('input.inputGroupFile')[0].files[0].name;
-                        fd.append('file', $(image).find('input.inputGroupFile')[0].files[0]);
+                        files.push($(image).find('input.inputGroupFile')[0].files[0]);
                     }
                     var imageToPush = {
                         id: $(image).find('img').data('id'),
@@ -234,19 +235,23 @@
                     method: 'POST',
                     data: { id: id, serviceName: serviceName, description: description, images: images, typeId: typeId },
                     success: function (data) {
+                        debugger;
+                        var formData = new FormData();
+                        for (var i = 0; i < files.length; i++) {
+                            formData.append(files[i].name, files[i]);
+                        }
                         if (data.result) {
-                            debugger;
                             $.ajax({
                                 url: '@Url.Action("UploadImages", "Services",new { area = "Admin" })',
                                 method: 'POST',
-                                data: fd,
-                                contentType: false,
                                 processData: false,
+                                contentType: false,
+                                data: formData,
                                 success: function (data) {
                                     if (data.result) {
                                         Swal.fire(
                                             'Success!',
-                                            'Status was updated.',
+                                            'Service was updated.',
                                             'success'
                                         ).then(function () {
                                             search();
