@@ -77,6 +77,31 @@
                 <div class="modal-body">
                     <input type="hidden" id="id-modal" />
                     <div class="row justify-content-center">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="service-name">Name</label>
+                                <input type="text" class="form-control" id="service-name" aria-describedby="nameHelp" placeholder="Enter service name..." />
+                                <small id="nameHelp" class="form-text text-warning">This field is required.</small>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="service-description">Description</label>
+                                <textarea class="form-control" id="service-description" placeholder="Enter service description..." maxlength="1000"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <select class="form-control" id="select-service-type">
+                                @foreach (var type in Model.ServiceTypes.Where(x => !x.IsDeleted))
+                                {
+                                    <option value="@type.Id">@type.TypeName</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-12 text-right mt-2">
+                            <button type="button" class="btn btn-sm btn-info" id="add-service-image">Add image</button>
+                        </div>
+                        <div class="col-12 mt-2" id="service-images"></div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -152,6 +177,213 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
+
+            $('.service-row').find('td,th').not('.delete-restore-btn').click(function () {
+                $.ajax({
+                    url: '@Url.Action("GetServiceById", "Services", new { area = "Admin" })',
+                    method: 'GET',
+                    data: { id: $(this).parent().data('id') },
+                    success: function (data) {
+                        
+                        if (data) {
+                            $('#id-modal').val(data.id);
+                            $('#service-name').val(data.serviceName);
+                            $('#service-description').val(data.description);
+                            $('#select-service-type').val(data.typeId);
+
+                            for (var i = 0; i < data.images.length; i++) {
+                                addSectionImage($('#service-images'), data.images[i]);
+                            }
+                        }
+
+                        $('#modalServices').modal('show');
+                    },
+                    error: function () {
+                        Swal.fire(
+                            'Error!',
+                            'Server error was occured. Please, contact support team!',
+                            'error'
+                        );
+                    }
+                });
+            });
+
+            $('#save-service-changes').click(function () {
+                var id = $('#id-modal').val();
+                var serviceName = $('#service-name').val();
+                var description = $('#service-description').val();
+                var typeId = $('#select-service-type').val();
+                var images = [];
+                var fd = new FormData();
+                fd.append('file', $('#inputGroupFile')[0].files[0]);
+                $('.service-image-row').each(function (i, image) {                    
+                    var fileName = null;
+                    if ($(image).find('input.inputGroupFile')[0] && $(image).find('input.inputGroupFile')[0].files[0]) {
+                        fileName = $(image).find('input.inputGroupFile')[0].files[0].name;
+                        fd.append('file', $(image).find('input.inputGroupFile')[0].files[0]);
+                    }
+                    var imageToPush = {
+                        id: $(image).find('img').data('id'),
+                        updated: $(image).find('img').data('updated'),
+                        image: fileName
+                    };
+                    images.push(imageToPush);
+                });
+                $.ajax({
+                    url: '@Url.Action("MergeService", "Services", new { area = "Admin" })',
+                    method: 'POST',
+                    data: { id: id, serviceName: serviceName, description: description, images: images, typeId: typeId },
+                    success: function (data) {
+                        if (data.result) {
+                            debugger;
+                            $.ajax({
+                                url: '@Url.Action("UploadImages", "Services",new { area = "Admin" })',
+                                method: 'POST',
+                                data: fd,
+                                contentType: false,
+                                processData: false,
+                                success: function (data) {
+                                    if (data.result) {
+                                        Swal.fire(
+                                            'Success!',
+                                            'Status was updated.',
+                                            'success'
+                                        ).then(function () {
+                                            search();
+                                        });
+                                    } else {
+                                        Swal.fire(
+                                            'Error!',
+                                            "Something go wrong or images were empty or doesn't exist.",
+                                            'error'
+                                        );
+                                    }
+                                },
+                                error: function () {
+                                    Swal.fire(
+                                        'Error!',
+                                        'Server error was occured. Please, contact support team!',
+                                        'error'
+                                    );
+                                }
+                            });
+                        } else {
+                            Swal.fire(
+                                'Error!',
+                                "Something go wrong or service wasn't found.",
+                                'error'
+                            );
+                        }
+                    },
+                    error: function () {
+                        Swal.fire(
+                            'Error!',
+                            'Server error was occured. Please, contact support team!',
+                            'error'
+                        );
+                    }
+                });
+            });
+
+            function clearServicesModal () {
+                $('#id-modal').val(null);
+                $('#service-name').val(null);
+                $('#service-description').val(null);
+                $('#select-service-type').val(null);
+                $('#service-images').html(null);
+            }
+
+            $('#add-service-image').click(function () {
+                addSectionImage($('#service-images'));
+            });
+
+            function addSectionImage(root, model) {
+                var path = '';
+                if (model) {
+                    var image = '<img src=' + model.image + ' class="rounded mx-auto show-service-image img-thumbnail w-50 mb-2" data-id="' + model.id + '">';
+                    if (model.image) {
+                        path = model.image;
+                    }
+                } else {
+                    var image = '<img src="#" class="rounded mx-auto d-none show-service-image img-thumbnail w-50 mb-2">';
+                }
+                root.append(
+                    '<div class="service-image-row animated fadeInLeft text-center">' +
+                        '<div class="input-group input-group-sm mb-2">' +
+                            '<div class="custom-file text-left">' +
+                                '<input type="file" name="files" class="custom-file-input inputGroupFile" id="inputGroupFile" aria-describedby="inputGroupFileAddon">' +
+                                '<label class="custom-file-label" for="inputGroupFile">' + (path ? path : 'Choose file...') + '</label>' +
+                            '</div>' +
+                            '<div class="input-group-append">' +
+                                '<button class="btn btn-danger delete-service-image" type="button" id="inputGroupFileAddon">Delete Image</button>' +
+                            '</div>' +
+                        '</div>' +
+                        image +
+                    '</div>');
+                root.find('.delete-service-image').off('click').click(function () {
+                    var row = $(this).parents('div.service-image-row');
+                    if (!row.find('img').data('id')) {
+                        var image = row.addClass('fadeOutRight');
+                        setTimeout(function () {
+                            image.remove();
+                        }, 1000);
+                    } else {
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            text: "This image will be deleted!",
+                            type: 'warning',
+                            showCancelButton: true
+                        }).then((result) => {
+                            if (result.value) {
+                                $.ajax({
+                                    method: 'DELETE',
+                                    url: '@Url.Action("DeleteServiceImage", "Services", new { area = "Admin" })',
+                                    data: { id: $(this).parents('div.input-group').siblings('img').data('id') },
+                                    success: function (data) {
+                                        if (data.result) {
+                                            var image = row.addClass('fadeOutRight');
+                                            setTimeout(function () {
+                                                image.remove();
+                                            }, 1000);
+                                        } else {
+                                            Swal.fire(
+                                                'Error!',
+                                                "Record wasn't found.",
+                                                'error'
+                                            );
+                                        }
+                                    },
+                                    error: function () {
+                                        Swal.fire(
+                                            'Error!',
+                                            'Server error was occured. Please, contact support team!',
+                                            'error'
+                                        );
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+                $(".inputGroupFile").off("change").on("change", function () {
+                    var input = $(this)[0];
+                    $(this).next(".custom-file-label").html(input.files[0].name);
+                    if (input.files && input.files[0]) {
+                        var reader = new FileReader();
+                        reader.onload = function (e) {
+                            $(input).parents("div.input-group").siblings("img.show-service-image").attr("src", e.target.result).removeClass("d-none").addClass("d-block animated fadeInUp");
+                        };
+                        reader.readAsDataURL(input.files[0]);
+                    }
+                    $(this).parents('div.input-group').siblings('img').data('updated', true);
+                });
+            }
+
+            $('#add-service').click(function () {
+                clearServicesModal();
+                $('#modalServices').modal('show');
+            });
+
             $('#change-service-types').click(function () {
                 $('#modalServiceTypes').modal('show');
             });
@@ -229,68 +461,6 @@
                 var size = $('#select-size :selected').text();
                 window.location.replace("@Url.Action("Index", "Services", new { area = "Admin" })?size=" + size + "&withDeleted=" + $('#isDeleted').is(':checked') + '&number=' + $('.btn-page.active').text());
             }
-
-            $('.service-row').find('td,th').not('.delete-restore-btn').click(function () {
-                $.ajax({
-                    url: '@Url.Action("GetServiceById", "Services", new { area = "Admin" })',
-                    method: 'GET',
-                    data: { id: $(this).parent().data('id') },
-                    success: function (data) {
-                        var _blank = '—';
-                        $('#id-modal').val(data.id);
-                        $('#first-name-modal').text(data.firstName ? data.firstName : _blank);
-                        $('#last-name-modal').text(data.lastName ? data.lastName : _blank);
-                        $('#received-at-modal').text(new Date(data.receivedAt).toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' }));
-                        $('#email-modal').attr('href', 'mailto:' + data.email).text(data.email);
-                        $('#phone-modal').text(data.phone ? data.phone : _blank);
-                        $('#status-modal').val(data.status);
-                        $('#subject-modal').val(data.subject);
-                        $('#text-modal').val(data.text);
-                        $('#modalServices').modal('show');
-                    },
-                    error: function () {
-                        Swal.fire(
-                            'Error!',
-                            'Server error was occured. Please, contact support team!',
-                            'error'
-                        );
-                    }
-                });
-            });
-
-            $('#save-service-changes').click(function () {
-                var id = $('#id-modal').val();
-                var status = $('#status-modal :selected').val();
-                $.ajax({
-                    url: '@Url.Action("UpdateMessageStatus", "Services", new { area = "Admin" })',
-                    method: 'POST',
-                    data: { id: id, status: status },
-                    success: function (data) {
-                        if (data.result) {
-                            Swal.fire(
-                                'Success!',
-                                'Status was updated.',
-                                'success'
-                            ).then(function () {
-                                search();
-                            });
-                        } else {
-                            Swal.fire(
-                                'Error!',
-                                "Something go wrong or service wasn't found.",
-                                'error'
-                            );
-                        }
-                    },
-                    error: function () {
-                        Swal.fire(
-                            'Error!',
-                            'Server error was occured. Please, contact support team!',
-                            'error'
-                        );
-                    }
-                });
-            });
 
             $('#search').click(search);
 

@@ -30,12 +30,14 @@ namespace BlackSeaConstruction.BusinessLogicLayer.BusinessLogicLayers
                         Image = x.Image,
                         IsDeleted = x.IsDeleted,
                         ServiceId = x.ServiceId
-                    });
+                    }).ToList();
                     vm.ServiceType = _serviceTypes.FindById(m.TypeId)?.TypeName;
                 });
                 cfg.CreateMap<ServiceVM, Service>();
                 cfg.CreateMap<ServiceType, ServiceTypeVM>();
                 cfg.CreateMap<ServiceTypeVM, ServiceType>();
+                cfg.CreateMap<ServiceImage, ServiceImageVM>();
+                cfg.CreateMap<ServiceImageVM, ServiceImage>();
             }).CreateMapper();
         }
 
@@ -75,6 +77,21 @@ namespace BlackSeaConstruction.BusinessLogicLayer.BusinessLogicLayers
             serviceVM.Id = service.Id;
             return result;
         }
+
+        public ServiceImageVM GetServiceImageById(int id)
+        {
+            var image = _serviceImages.FindById(id);
+            var imageVM = Map<ServiceImage, ServiceImageVM>(image);
+            return imageVM;
+        }
+        public bool MergeServiceImage(ServiceImageVM serviceImageVM)
+        {
+            var serviceImage = Map<ServiceImageVM, ServiceImage>(serviceImageVM);
+            var result = _serviceImages.Merge(serviceImage);
+            serviceImageVM.Id = serviceImage.Id;
+            return result;
+        }
+        public bool DeleteServiceImage(int id) => _serviceImages.Delete(id);
 
         public bool DeleteService(int id) => _services.Delete(id);
         public bool RestoreService(int id) => _services.Restore(id);
