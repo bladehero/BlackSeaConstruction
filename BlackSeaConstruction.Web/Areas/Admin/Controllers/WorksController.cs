@@ -72,7 +72,7 @@ namespace BlackSeaConstruction.Web.Areas.Admin.Controllers
             catch (System.Exception ex)
             {
                 result = false;
-                message = UnknownError;
+                message = ex.ToString();
             }
 
             return Json(new { result, message });
@@ -101,7 +101,7 @@ namespace BlackSeaConstruction.Web.Areas.Admin.Controllers
             catch (System.Exception ex)
             {
                 result = false;
-                message = UnknownError;
+                message = ex.ToString();
             }
 
             return Json(new { result, message });
