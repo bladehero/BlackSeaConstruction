@@ -37,33 +37,39 @@ namespace BlackSeaConstruction.Web.Areas.Admin.Controllers
                     Id = model.Id.GetValueOrDefault(),
                     ProjectName = model.Name,
                     Description = model.Description,
-                    Latitude = (decimal)model.Latitude,
-                    Longtitude = (decimal)model.Longtitude
+                    Latitude = (decimal?)model.Latitude,
+                    Longtitude = (decimal?)model.Longtitude
                 };
 
                 var projectCreated = UnitOfWork.Projects.MergeProject(project);
                 if (projectCreated)
                 {
-                    foreach (var section in model.Sections)
+                    if (model.Sections?.Count() > 0)
                     {
-                        var _section = new ProjectSectionVM
+                        foreach (var section in model.Sections)
                         {
-                            Id = section.Id.GetValueOrDefault(),
-                            Description = section.Description,
-                            SectionName = section.Name,
-                            ProjectId = project.Id
-                        };
-                        UnitOfWork.Projects.MergeProjectSection(_section);
-                        foreach (var image in section.Images)
-                        {
-                            if (image.Updated)
+                            var _section = new ProjectSectionVM
                             {
-                                UnitOfWork.Projects.MergeProjectSectionImage(new ProjectSectionImageVM
+                                Id = section.Id.GetValueOrDefault(),
+                                Description = section.Description,
+                                SectionName = section.Name,
+                                ProjectId = project.Id
+                            };
+                            UnitOfWork.Projects.MergeProjectSection(_section);
+                            if (section.Images?.Count() > 0)
+                            {
+                                foreach (var image in section.Images)
                                 {
-                                    Id = image.Id.GetValueOrDefault(),
-                                    Image = image.FileName,
-                                    SectionId = _section.Id
-                                });
+                                    if (image.Updated)
+                                    {
+                                        UnitOfWork.Projects.MergeProjectSectionImage(new ProjectSectionImageVM
+                                        {
+                                            Id = image.Id.GetValueOrDefault(),
+                                            Image = image.FileName,
+                                            SectionId = _section.Id
+                                        });
+                                    }
+                                }
                             }
                         }
                     }
