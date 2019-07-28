@@ -54,7 +54,7 @@ namespace BlackSeaConstruction.Web.Areas.Admin.Controllers
 
                     result = UnitOfWork.Services.MergeService(service);
 
-                    if (result)
+                    if (result && mergeService.Images != null)
                     {
                         foreach (var image in mergeService.Images)
                         {
